@@ -4,21 +4,37 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-
+    public Vector3 initPos;
     public float playerSpeed = 2.0f;
+    private Vector3 moveDirection = Vector3.right;
+ 
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector3(-24.0f, 1.0f, 6.0f);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.right * playerSpeed * Time.deltaTime);
-        if (transform.position.x > 6.0f)
+        transform.Translate(moveDirection * playerSpeed * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        switch(other.tag)
         {
-            transform.position = new Vector3(-24.0f, 1.0f, 6.0f);
+            case "LeftTurn":
+                transform.Rotate(new Vector3(0, -90, 0));
+                break;
+            case "RightTurn":
+                transform.Rotate(new Vector3(0, 90, 0));
+                break;
+            case "LevelFinish":
+                transform.position = initPos;
+                break;
+            default:
+                break;
         }
     }
 }
