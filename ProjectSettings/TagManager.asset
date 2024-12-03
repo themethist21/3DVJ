@@ -6,6 +6,7 @@ TagManager:
   tags:
   - LeftTurn
   - LevelFinish
+  - UIController
   layers:
   - Default
   - TransparentFX
