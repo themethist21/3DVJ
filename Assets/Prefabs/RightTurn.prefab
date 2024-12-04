@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1103413062050697523}
   - component: {fileID: 7221736341179442290}
   m_Layer: 0
-  m_Name: LeftTurn
-  m_TagString: Untagged
+  m_Name: RightTurn
+  m_TagString: RightTurn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -67,7 +67,7 @@ GameObject:
   - component: {fileID: 3909180760125419504}
   m_Layer: 0
   m_Name: TurnTrigger
-  m_TagString: LeftTurn
+  m_TagString: RightTurn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -168,7 +168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b1243bcbb8ed74e4ab8fd4d283783ff0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.44
+      value: -0.74
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b1243bcbb8ed74e4ab8fd4d283783ff0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -176,7 +176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b1243bcbb8ed74e4ab8fd4d283783ff0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.69
+      value: -0.588
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b1243bcbb8ed74e4ab8fd4d283783ff0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -246,7 +246,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dac1f6a026468af46b8928893e3eea27, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.05
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dac1f6a026468af46b8928893e3eea27, type: 3}
       propertyPath: m_LocalPosition.y
