@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d827eb34d1274b0488aebf4fb4f28607, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  gravityStrength: -37.5
+  gravityStrength: -125
   fallGravityMult: 2
   jumpInputBufferTime: 0.2
-  jumpForce: 15
-  jumpHeight: 3
-  jumpTimeToApex: 0.4
+  jumpForce: 25
+  jumpHeight: 2.5
+  jumpTimeToApex: 0.2
   playerSpeed: 7

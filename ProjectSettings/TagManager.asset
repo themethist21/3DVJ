@@ -8,6 +8,7 @@ TagManager:
   - LevelFinish
   - UIController
   - RightTurn
+  - JumpTrigger
   layers:
   - Default
   - TransparentFX

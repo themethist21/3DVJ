@@ -93,12 +93,17 @@ public class PlayerMovement : MonoBehaviour
         {
             case "LeftTurn":
                 transform.Rotate(new Vector3(0, -90, 0));
+                transform.SetPositionAndRotation(fixCoords(transform.position), transform.rotation);
                 break;
             case "RightTurn":
                 transform.Rotate(new Vector3(0, 90, 0));
+                transform.SetPositionAndRotation(fixCoords(transform.position), transform.rotation);
                 break;
             case "LevelFinish":
                 transform.position = initPos;
+                break;
+            case "JumpTrigger":
+                Jump();
                 break;
             default:
                 break;
@@ -120,5 +125,20 @@ public class PlayerMovement : MonoBehaviour
     private void SetGravityScale(float scale)
     {
         gravityScale = scale;
+    }
+
+    private void Jump()
+    {
+        if (state == PlayerStates.Grounded)
+        {
+            if (rb.velocity.y < 0) rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            rb.AddForce(Vector3.up * Data.jumpForce, ForceMode.Impulse);
+            state = PlayerStates.Jump;
+        }
+    }
+
+    Vector3 fixCoords(Vector3 coords)
+    {
+        return new Vector3(Mathf.RoundToInt(coords.x), coords.y, Mathf.RoundToInt(coords.z));
     }
 }
