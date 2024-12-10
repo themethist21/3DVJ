@@ -1,144 +1,75 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerStates
+public class PlayerMovementHorizontal : MonoBehaviour
 {
-    Grounded,
-    Jump,
-    Fall
-}
-public class PlayerMovement : MonoBehaviour
-{
+    public float playerSpeed = 5f;
+    private Vector3 moveDirection;
+    private Vector3 initPos;
 
-    public PlayerData Data;
-    //Public components
-    public Rigidbody rb;
-
-
-    //Public movement variables
-    public Vector3 initPos;
-    public float gravityScale = 1.0f;
-
-    //private movement variables
-    private const float jumpInputBufferTime = 0.2f;
-
-    //Timers
-    private float lastJumpInputTimer = 0.0f;
-
-    PlayerStates state = PlayerStates.Grounded;
-
-
-    private Vector3 moveDirection = Vector3.right;
-
-    private void OnEnable()
-    {
-        rb.useGravity = false;
-    }
-
-
-    // Start is called before the first frame update
     void Start()
     {
+        initPos = transform.position;
 
+        // Inicia el movimiento hacia la derecha (eje X global positivo)
+        moveDirection = Vector3.right;
     }
 
-    private void FixedUpdate()
-    {
-        Vector3 gravity = Data.gravityStrength * gravityScale * Vector3.up;
-        rb.AddForce(gravity, ForceMode.Acceleration);
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        #region TIMERS
-        lastJumpInputTimer -= Time.deltaTime;
-        #endregion
-
-        #region INPUT
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            lastJumpInputTimer = jumpInputBufferTime;
-        }
-        #endregion
-
-        if (state == PlayerStates.Grounded)
-        {
-            transform.Translate(Data.playerSpeed * Time.deltaTime * moveDirection);
-
-            if (lastJumpInputTimer > 0.0f)
-            {
-                if (rb.velocity.y < 0) rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-                rb.AddForce(Vector3.up * Data.jumpForce, ForceMode.Impulse);
-                state = PlayerStates.Jump;
-            }
-        }
-        else if (state == PlayerStates.Fall)
-        {
-            transform.Translate(Data.playerSpeed * Time.deltaTime * moveDirection);
-            SetGravityScale(1.0f * Data.fallGravityMult);
-        }
-        else if (state == PlayerStates.Jump)
-        {
-            transform.Translate(Data.playerSpeed * Time.deltaTime * moveDirection);
-
-            if (rb.velocity.y < 0) state = PlayerStates.Fall;
-        }
+        // Movimiento horizontal con coordenadas globales
+        transform.Translate(moveDirection * playerSpeed * Time.deltaTime, Space.World);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        switch(other.tag)
+        switch (other.tag)
         {
             case "LeftTurn":
-                transform.Rotate(new Vector3(0, -90, 0));
-                transform.SetPositionAndRotation(fixCoords(transform.position), transform.rotation);
+                // Girar hacia la izquierda: 90 grados negativos
+                RotateGlobal(-90);
                 break;
+
             case "RightTurn":
-                transform.Rotate(new Vector3(0, 90, 0));
-                transform.SetPositionAndRotation(fixCoords(transform.position), transform.rotation);
+                // Girar hacia la derecha: 90 grados positivos
+                RotateGlobal(90);
                 break;
+
             case "LevelFinish":
+                // Reiniciar posición al inicio
                 transform.position = initPos;
+                moveDirection = Vector3.right; // Reinicia dirección hacia la derecha
                 break;
-            case "JumpTrigger":
-                Jump();
-                break;
+
             default:
                 break;
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void RotateGlobal(float angle)
     {
-        if(state == PlayerStates.Fall) rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-    }
+        // Rotar el objeto en el eje Y global
+        transform.Rotate(Vector3.up, angle, Space.World);
 
-    private void OnCollisionStay(Collision collision)
-    {
-        if (state != PlayerStates.Jump) state = PlayerStates.Grounded;
-        SetGravityScale(1.0f);
-    }
-
-
-    private void SetGravityScale(float scale)
-    {
-        gravityScale = scale;
-    }
-
-    private void Jump()
-    {
-        if (state == PlayerStates.Grounded)
+        // Actualizar la dirección global basada en la rotación
+        if (angle < 0) // Giro a la izquierda
         {
-            if (rb.velocity.y < 0) rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            rb.AddForce(Vector3.up * Data.jumpForce, ForceMode.Impulse);
-            state = PlayerStates.Jump;
+            if (moveDirection == Vector3.right) moveDirection = Vector3.forward;
+            else if (moveDirection == Vector3.forward) moveDirection = Vector3.left;
+            else if (moveDirection == Vector3.left) moveDirection = Vector3.back;
+            else if (moveDirection == Vector3.back) moveDirection = Vector3.right;
+        }
+        else // Giro a la derecha
+        {
+            if (moveDirection == Vector3.right) moveDirection = Vector3.back;
+            else if (moveDirection == Vector3.forward) moveDirection = Vector3.right;
+            else if (moveDirection == Vector3.left) moveDirection = Vector3.forward;
+            else if (moveDirection == Vector3.back) moveDirection = Vector3.left;
         }
     }
 
-    Vector3 fixCoords(Vector3 coords)
+    Vector3 FixCoords(Vector3 coords)
     {
+        // Redondear las coordenadas globales
         return new Vector3(Mathf.RoundToInt(coords.x), coords.y, Mathf.RoundToInt(coords.z));
     }
 }
