@@ -35,9 +35,6 @@ public class PlayerJumpController : MonoBehaviour
         }
 
         initPos = transform.parent.position;
-
-        
-        
     }
 
     void Update()
@@ -81,9 +78,21 @@ public class PlayerJumpController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "JumpTrigger")
+        switch (other.tag)
         {
-            lastJumpInputTimer = Data.jumpInputBufferTime;
+            case "Spikes":
+                // Reiniciar posición al inicio
+                PlayerMovementHorizontal parentScript = transform.parent.GetComponent<PlayerMovementHorizontal>();
+
+                transform.parent.position = initPos;
+                transform.position = initPos; //por si te pilla en medio de un salto
+                parentScript.SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
+                break;
+            case "JumpTrigger":
+                lastJumpInputTimer = Data.jumpInputBufferTime;
+                break;
+            default:
+                break;
         }
     }
 
@@ -93,7 +102,7 @@ public class PlayerJumpController : MonoBehaviour
         // Aplicar fuerza de salto
         Debug.Log("Saltando...");
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reiniciar velocidad vertical
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        rb.AddForce(Vector3.up * Data.jumpForce, ForceMode.Impulse);
         state = PlayerStates.Jump;
         Debug.Log("Estado después de saltar: " + state);
     }

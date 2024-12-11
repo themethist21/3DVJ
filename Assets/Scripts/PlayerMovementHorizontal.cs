@@ -20,7 +20,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
     void Update()
     {
         // Movimiento horizontal con coordenadas globales
-        transform.Translate(moveDirection * playerSpeed * Time.deltaTime, Space.World);
+        transform.Translate(moveDirection * Data.playerSpeed * Time.deltaTime, Space.World);
     }
 
     private void OnTriggerEnter(Collider other)
