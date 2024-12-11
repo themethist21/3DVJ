@@ -1644,10 +1644,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1207230350}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d05d04d444cbe4c48a5c68c63e8428df, type: 3}
+  m_Script: {fileID: 11500000, guid: 02bf3ae898e4c8a4fade3f3889c6e091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 5
+  Data: {fileID: 11400000, guid: 9299871e1f9ac5245899b69deacec344, type: 2}
+  rayDistance: 2
 --- !u!4 &1207230353
 Transform:
   m_ObjectHideFlags: 0
@@ -2719,12 +2720,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1734717628}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecadf8642c0712443b6fb481af0e28ae, type: 3}
+  m_Script: {fileID: 11500000, guid: 28c9827c407438f4bbe65b8b117ea8c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 9
-  gravityStrength: -20
-  fallGravityMultiplier: 1
+  Data: {fileID: 11400000, guid: 9299871e1f9ac5245899b69deacec344, type: 2}
 --- !u!65 &1734717631
 BoxCollider:
   m_ObjectHideFlags: 0
