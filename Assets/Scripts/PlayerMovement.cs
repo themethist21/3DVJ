@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class PlayerMovementHorizontal : MonoBehaviour
 {
-    public float playerSpeed = 5f;
+    public PlayerData Data;
+
     private Vector3 moveDirection;
     private Vector3 initPos;
 
@@ -17,7 +18,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
     void Update()
     {
         // Movimiento horizontal con coordenadas globales
-        transform.Translate(moveDirection * playerSpeed * Time.deltaTime, Space.World);
+        transform.Translate(moveDirection * Data.playerSpeed * Time.deltaTime, Space.World);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -27,11 +28,14 @@ public class PlayerMovementHorizontal : MonoBehaviour
             case "LeftTurn":
                 // Girar hacia la izquierda: 90 grados negativos
                 RotateGlobal(-90);
+                transform.SetPositionAndRotation(FixCoords(transform.position), transform.rotation);
                 break;
 
             case "RightTurn":
                 // Girar hacia la derecha: 90 grados positivos
                 RotateGlobal(90);
+                transform.SetPositionAndRotation(FixCoords(transform.position), transform.rotation);
+
                 break;
 
             case "LevelFinish":
@@ -51,20 +55,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
         transform.Rotate(Vector3.up, angle, Space.World);
 
         // Actualizar la dirección global basada en la rotación
-        if (angle < 0) // Giro a la izquierda
-        {
-            if (moveDirection == Vector3.right) moveDirection = Vector3.forward;
-            else if (moveDirection == Vector3.forward) moveDirection = Vector3.left;
-            else if (moveDirection == Vector3.left) moveDirection = Vector3.back;
-            else if (moveDirection == Vector3.back) moveDirection = Vector3.right;
-        }
-        else // Giro a la derecha
-        {
-            if (moveDirection == Vector3.right) moveDirection = Vector3.back;
-            else if (moveDirection == Vector3.forward) moveDirection = Vector3.right;
-            else if (moveDirection == Vector3.left) moveDirection = Vector3.forward;
-            else if (moveDirection == Vector3.back) moveDirection = Vector3.left;
-        }
+        moveDirection = Quaternion.Euler(0, angle, 0) * moveDirection;
     }
 
     Vector3 FixCoords(Vector3 coords)

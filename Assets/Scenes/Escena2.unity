@@ -1282,6 +1282,14 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2414638733377635274, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
+      propertyPath: Data
+      value: 
+      objectReference: {fileID: 11400000, guid: 9299871e1f9ac5245899b69deacec344, type: 2}
+    - target: {fileID: 4862971369271676160, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
+      propertyPath: Data
+      value: 
+      objectReference: {fileID: 11400000, guid: 9299871e1f9ac5245899b69deacec344, type: 2}
     - target: {fileID: 5560031893359547173, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
       propertyPath: m_Name
       value: Player

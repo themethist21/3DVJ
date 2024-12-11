@@ -9,13 +9,13 @@ public enum PlayerStates
 
 public class PlayerJumpController : MonoBehaviour
 {
-    public float jumpForce = 10f; // Fuerza del salto
-    public float gravityStrength = -9.81f; // Gravedad aplicada
-    public float fallGravityMultiplier = 2f; // Gravedad multiplicada en caída
+    public PlayerData Data;
 
     private Rigidbody rb;
     private PlayerStates state = PlayerStates.Grounded;
     private float gravityScale = 1.0f;
+
+    private float lastJumpInputTimer = 0.0f;
 
     void Start()
     {
@@ -35,11 +35,19 @@ public class PlayerJumpController : MonoBehaviour
 
     void Update()
     {
+        //Timers
+        lastJumpInputTimer -= Time.deltaTime;
+
+        //Input
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            lastJumpInputTimer = Data.jumpInputBufferTime;
+        }
 
         // Detectar entrada para salto
-        if (Input.GetKeyDown(KeyCode.Space) && state == PlayerStates.Grounded)
+        if (lastJumpInputTimer > 0.0f && state == PlayerStates.Grounded)
         {
-            Debug.Log("Saltando...");
             Jump();
         }
 
@@ -47,15 +55,14 @@ public class PlayerJumpController : MonoBehaviour
         if (state == PlayerStates.Jump && rb.linearVelocity.y < 0)
         {
             state = PlayerStates.Fall;
-            SetGravityScale(fallGravityMultiplier); // Aumentar la gravedad en la caída
-            Debug.Log("Cambiando a estado Fall.");
+            SetGravityScale(Data.fallGravityMult); // Aumentar la gravedad en la caída
         }
     }
 
     void FixedUpdate()
     {
         // Aplicar gravedad manualmente
-        Vector3 gravity = Vector3.up * gravityStrength * gravityScale;
+        Vector3 gravity = gravityScale * Data.gravityStrength * Vector3.up;
         rb.AddForce(gravity, ForceMode.Acceleration);
     }
 
@@ -63,18 +70,23 @@ public class PlayerJumpController : MonoBehaviour
     {
         state = PlayerStates.Grounded;
         SetGravityScale(1.0f); // Restaurar la gravedad normal
-        Debug.Log("Cambiando a estado Grounded.");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "JumpTrigger")
+        {
+            lastJumpInputTimer = Data.jumpInputBufferTime;
+        }
     }
 
 
     private void Jump()
     {
         // Aplicar fuerza de salto
-        Debug.Log("Saltando...");
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reiniciar velocidad vertical
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        rb.AddForce(Vector3.up * Data.jumpForce, ForceMode.Impulse);
         state = PlayerStates.Jump;
-        Debug.Log("Estado después de saltar: " + state);
     }
 
     private void SetGravityScale(float scale)
