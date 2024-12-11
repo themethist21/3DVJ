@@ -6,6 +6,8 @@ public class PlayerMovementHorizontal : MonoBehaviour
     private Vector3 moveDirection;
     private Vector3 initPos;
 
+    public float rayDistance = 2f;
+
     void Start()
     {
         initPos = transform.position;
@@ -27,11 +29,13 @@ public class PlayerMovementHorizontal : MonoBehaviour
             case "LeftTurn":
                 // Girar hacia la izquierda: 90 grados negativos
                 RotateGlobal(-90);
+                PositionOnBlock();
                 break;
 
             case "RightTurn":
                 // Girar hacia la derecha: 90 grados positivos
                 RotateGlobal(90);
+                PositionOnBlock();
                 break;
 
             case "LevelFinish":
@@ -42,6 +46,33 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
             default:
                 break;
+        }
+    }
+
+    private void PositionOnBlock()
+    {
+        // Dirección del rayo (hacia abajo)
+        Vector3 direction = Vector3.down;
+
+        // Lanzar el raycast desde la posición del objeto
+        if (Physics.Raycast(transform.position, direction, out RaycastHit hitInfo, rayDistance))
+        {
+            // Si el raycast golpea un objeto, obtiene su Collider
+            Collider blockCollider = hitInfo.collider;
+
+            // Calcula el centro del bloque usando el bounding box del Collider
+            Vector3 blockCenter = blockCollider.bounds.center;
+
+            // Posiciona al personaje en el centro del bloque (ajusta la altura si es necesario)
+            Vector3 newPosition = new Vector3(blockCenter.x, blockCenter.y + blockCollider.bounds.extents.y, blockCenter.z);
+            transform.position = newPosition;
+
+            Debug.Log($"Posicionado sobre el bloque: {blockCollider.gameObject.name}");
+            Debug.Log($"Centro del bloque: {blockCenter}");
+        }
+        else
+        {
+            Debug.Log("No hay bloques debajo.");
         }
     }
 
@@ -71,5 +102,17 @@ public class PlayerMovementHorizontal : MonoBehaviour
     {
         // Redondear las coordenadas globales
         return new Vector3(Mathf.RoundToInt(coords.x), coords.y, Mathf.RoundToInt(coords.z));
+    }
+
+        // Método para obtener el valor del atributo privado
+    public Vector3 GetmoveDirection()
+    {
+        return moveDirection;
+    }
+
+    // Método para establecer el valor del atributo privado
+    public void SetmoveDirection(Vector3 value)
+    {
+        moveDirection = value;
     }
 }

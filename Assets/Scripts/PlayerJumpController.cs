@@ -17,6 +17,9 @@ public class PlayerJumpController : MonoBehaviour
     private PlayerStates state = PlayerStates.Grounded;
     private float gravityScale = 1.0f;
 
+    private Vector3 initPos;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -30,6 +33,10 @@ public class PlayerJumpController : MonoBehaviour
             Physics.IgnoreCollision(parentCollider, childCollider);
             Debug.Log("Colisión entre padre e hijo ignorada.");
         }
+
+        initPos = transform.parent.position;
+
+        
         
     }
 
@@ -64,6 +71,22 @@ public class PlayerJumpController : MonoBehaviour
         state = PlayerStates.Grounded;
         SetGravityScale(1.0f); // Restaurar la gravedad normal
         Debug.Log("Cambiando a estado Grounded.");
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        switch (other.tag){
+            case "Spikes":
+                // Reiniciar posición al inicio
+                PlayerMovementHorizontal parentScript = transform.parent.GetComponent<PlayerMovementHorizontal>();
+               
+                transform.parent.position = initPos;
+                transform.position = initPos; //por si te pilla en medio de un salto
+                parentScript.SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
+                break;
+            default:
+                break;
+        }
     }
 
 
