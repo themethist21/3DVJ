@@ -17,6 +17,9 @@ public class PlayerJumpController : MonoBehaviour
 
     private float lastJumpInputTimer = 0.0f;
 
+    private Vector3 initPos;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -30,6 +33,10 @@ public class PlayerJumpController : MonoBehaviour
             Physics.IgnoreCollision(parentCollider, childCollider);
             Debug.Log("Colisión entre padre e hijo ignorada.");
         }
+
+        initPos = transform.parent.position;
+
+        
         
     }
 
@@ -84,9 +91,11 @@ public class PlayerJumpController : MonoBehaviour
     private void Jump()
     {
         // Aplicar fuerza de salto
+        Debug.Log("Saltando...");
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reiniciar velocidad vertical
-        rb.AddForce(Vector3.up * Data.jumpForce, ForceMode.Impulse);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         state = PlayerStates.Jump;
+        Debug.Log("Estado después de saltar: " + state);
     }
 
     private void SetGravityScale(float scale)
