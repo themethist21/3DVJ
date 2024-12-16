@@ -13,14 +13,27 @@ public class GameController : MonoBehaviour
     
     public UnityEvent toggleGodMode;
 
+    public UnityEvent terrainSpawn;
+
+    private float levelSpawnTimer;
+
+    private bool levelSpawned = false;
     // Start is called before the first frame update
     void Start()
     {
         score = 0;
+        levelSpawnTimer = 5.0f;
     }
 
     private void Update()
     {
+        levelSpawnTimer -= Time.deltaTime;
+
+        if (levelSpawnTimer < 0 && !levelSpawned)
+        {
+            levelSpawned = true;
+            terrainSpawn.Invoke();
+        }
 
         if (Input.GetKeyUp(KeyCode.G))
         {
