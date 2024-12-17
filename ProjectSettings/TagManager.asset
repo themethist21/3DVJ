@@ -11,6 +11,7 @@ TagManager:
   - JumpTrigger
   - Spikes
   - Obstacle
+  - Terrain
   layers:
   - Default
   - TransparentFX

@@ -173,7 +173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3023070087334013666, guid: 2dadb6bf1508e6341b0ee86db701735a, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Terrain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -596,7 +596,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3023070087334013666, guid: 2dadb6bf1508e6341b0ee86db701735a, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Terrain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1253,7 +1253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3023070087334013666, guid: 2dadb6bf1508e6341b0ee86db701735a, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Terrain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1547,6 +1547,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggleGodMode:
+    m_PersistentCalls:
+      m_Calls: []
+  terrainSpawn:
+    m_PersistentCalls:
+      m_Calls: []
+  obstacleSpawn:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &696072084
@@ -2519,7 +2525,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3023070087334013666, guid: 2dadb6bf1508e6341b0ee86db701735a, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Terrain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -173,7 +173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3023070087334013666, guid: 2dadb6bf1508e6341b0ee86db701735a, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Terrain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -596,7 +596,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3023070087334013666, guid: 2dadb6bf1508e6341b0ee86db701735a, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Terrain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1253,7 +1253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3023070087334013666, guid: 2dadb6bf1508e6341b0ee86db701735a, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Terrain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1480,31 +1480,10 @@ MonoBehaviour:
       m_Calls: []
   terrainSpawn:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1945088110}
-        m_TargetAssemblyTypeName: Terrain, Assembly-CSharp
-        m_MethodName: SetVisible
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1889088376}
-        m_TargetAssemblyTypeName: Terrain, Assembly-CSharp
-        m_MethodName: SetVisible
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+  obstacleSpawn:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &696072084
 Transform:
   m_ObjectHideFlags: 0
@@ -2475,7 +2454,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3023070087334013666, guid: 2dadb6bf1508e6341b0ee86db701735a, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Terrain
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3365,16 +3344,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3023070087334013666, guid: f21f2c4d10d164949b7086663eb64c6d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1945088110}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f21f2c4d10d164949b7086663eb64c6d, type: 3}
---- !u!1 &1523063117 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3023070087334013666, guid: f21f2c4d10d164949b7086663eb64c6d, type: 3}
-  m_PrefabInstance: {fileID: 1523063116}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1555974567 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1103413062050697523, guid: f25fd57783503c64ab4e8d99823a0c77, type: 3}
@@ -4027,28 +3998,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3023070087334013666, guid: f25fd57783503c64ab4e8d99823a0c77, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1889088376}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f25fd57783503c64ab4e8d99823a0c77, type: 3}
---- !u!1 &1889088375 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3023070087334013666, guid: f25fd57783503c64ab4e8d99823a0c77, type: 3}
-  m_PrefabInstance: {fileID: 1889088374}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1889088376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1889088375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55d22e7a599e31141a728db8fdc97b13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1905179752 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1103413062050697523, guid: f21f2c4d10d164949b7086663eb64c6d, type: 3}
@@ -4173,18 +4124,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1103413062050697523, guid: f21f2c4d10d164949b7086663eb64c6d, type: 3}
   m_PrefabInstance: {fileID: 1523063116}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1945088110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1523063117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55d22e7a599e31141a728db8fdc97b13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2014905326
 GameObject:
   m_ObjectHideFlags: 0
