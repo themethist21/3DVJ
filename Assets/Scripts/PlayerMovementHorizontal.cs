@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerMovementHorizontal : MonoBehaviour
 {
@@ -7,20 +8,28 @@ public class PlayerMovementHorizontal : MonoBehaviour
     private Vector3 moveDirection;
     private Vector3 initPos;
 
+    private bool move = false;
+
     public float rayDistance = 2f;
 
+    public UnityEvent levelFinish;
+    
     void Start()
     {
         initPos = transform.position;
 
         // Inicia el movimiento hacia la derecha (eje X global positivo)
         moveDirection = Vector3.right;
+
+        // Inicia los listeners
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().playerRun.AddListener(this.SetMove);
+        levelFinish.AddListener(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().PlayerEndStage);
     }
 
     void Update()
     {
         // Movimiento horizontal con coordenadas globales
-        transform.Translate(moveDirection * Data.playerSpeed * Time.deltaTime, Space.World);
+        if (move) transform.Translate(moveDirection * Data.playerSpeed * Time.deltaTime, Space.World);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -43,6 +52,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
                 // Reiniciar posición al inicio
                 transform.position = initPos;
                 moveDirection = Vector3.right; // Reinicia dirección hacia la derecha
+                levelFinish.Invoke();
                 break;
 
             default:
@@ -102,5 +112,10 @@ public class PlayerMovementHorizontal : MonoBehaviour
     public void SetmoveDirection(Vector3 value)
     {
         moveDirection = value;
+    }
+
+    public void SetMove(bool b)
+    { 
+        move = b;
     }
 }

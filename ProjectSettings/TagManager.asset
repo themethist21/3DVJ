@@ -12,6 +12,9 @@ TagManager:
   - Spikes
   - Obstacle
   - Terrain
+  - Stage1
+  - Stage2
+  - Coin
   layers:
   - Default
   - TransparentFX
