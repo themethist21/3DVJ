@@ -1,11 +1,27 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum PlayerStates
+{
+    Grounded,
+    Jump,
+    Fall
+}
+
 public class PlayerMovementHorizontal : MonoBehaviour
 {
     public PlayerData Data;
 
+    private Rigidbody rb;
+
+    private float gravityScale = 1.0f;
+
+    private float lastJumpInputTimer = 0.0f;
+
     private Vector3 moveDirection;
+
+    private PlayerStates state = PlayerStates.Grounded;
+
     private Vector3 initPos;
 
     private bool move = false;
@@ -16,6 +32,8 @@ public class PlayerMovementHorizontal : MonoBehaviour
     
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        rb.useGravity = false; // Desactivamos la gravedad predeterminada
         initPos = transform.position;
 
         // Inicia el movimiento hacia la derecha (eje X global positivo)
@@ -29,7 +47,32 @@ public class PlayerMovementHorizontal : MonoBehaviour
     void Update()
     {
         // Movimiento horizontal con coordenadas globales
-        if (move) transform.Translate(moveDirection * Data.playerSpeed * Time.deltaTime, Space.World);
+        if (move){
+            transform.Translate(moveDirection * Data.playerSpeed * Time.deltaTime, Space.World);
+        }
+
+        //Timers
+        lastJumpInputTimer -= Time.deltaTime;
+
+        //Input
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            lastJumpInputTimer = Data.jumpInputBufferTime;
+        }
+
+        // Detectar entrada para salto
+        if (lastJumpInputTimer > 0.0f && state == PlayerStates.Grounded)
+        {
+            Jump();
+        }
+
+        // Cambiar a estado de caída si la velocidad vertical es negativa
+        if (state == PlayerStates.Jump && rb.linearVelocity.y < 0)
+        {
+            state = PlayerStates.Fall;
+            SetGravityScale(Data.fallGravityMult); // Aumentar la gravedad en la caída
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -51,13 +94,50 @@ public class PlayerMovementHorizontal : MonoBehaviour
             case "LevelFinish":
                 // Reiniciar posición al inicio
                 transform.position = initPos;
-                moveDirection = Vector3.right; // Reinicia dirección hacia la derecha
+                SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
                 levelFinish.Invoke();
+                break;
+
+            case "Spikes":
+                // Reiniciar posición al inicio
+                transform.position = initPos; //por si te pilla en medio de un salto
+                SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
+                break;
+            case "JumpTrigger":
+                lastJumpInputTimer = Data.jumpInputBufferTime;
                 break;
 
             default:
                 break;
         }
+    }
+
+    private void Jump()
+    {
+        // Aplicar fuerza de salto
+        Debug.Log("Saltando...");
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reiniciar velocidad vertical
+        rb.AddForce(Vector3.up * Data.jumpForce, ForceMode.Impulse);
+        state = PlayerStates.Jump;
+        Debug.Log("Estado después de saltar: " + state);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        state = PlayerStates.Grounded;
+        SetGravityScale(1.0f); // Restaurar la gravedad normal
+    }
+
+    private void SetGravityScale(float scale)
+    {
+        gravityScale = scale;
+    }
+
+    void FixedUpdate()
+    {
+        // Aplicar gravedad manualmente
+        Vector3 gravity = gravityScale * Data.gravityStrength * Vector3.up;
+        rb.AddForce(gravity, ForceMode.Acceleration);
     }
 
     private void PositionOnBlock()
@@ -75,7 +155,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
             Vector3 blockCenter = blockCollider.bounds.center;
 
             // Posiciona al personaje en el centro del bloque (ajusta la altura si es necesario)
-            Vector3 newPosition = new Vector3(blockCenter.x, blockCenter.y + blockCollider.bounds.extents.y, blockCenter.z);
+            Vector3 newPosition = new Vector3(blockCenter.x, transform.position.y, blockCenter.z);
             transform.position = newPosition;
 
             Debug.Log($"Posicionado sobre el bloque: {blockCollider.gameObject.name}");
