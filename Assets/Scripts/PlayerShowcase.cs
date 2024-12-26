@@ -14,6 +14,6 @@ public class PlayerShowcase : MonoBehaviour
 
     void Update()
     {
-        model.Rotate(Vector3.left * rotateVel * Time.deltaTime);
+        model.Rotate(Vector3.up * rotateVel * Time.deltaTime);
     }
 }
