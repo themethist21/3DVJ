@@ -1481,6 +1481,10 @@ PrefabInstance:
       propertyPath: Data
       value: 
       objectReference: {fileID: 11400000, guid: 9299871e1f9ac5245899b69deacec344, type: 2}
+    - target: {fileID: 3147388479664875640, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
+      propertyPath: EmissionModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4862971369271676160, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
       propertyPath: Data
       value: 
@@ -1527,6 +1531,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6827652693525090439, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072499809518303145, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
