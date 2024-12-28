@@ -20,9 +20,11 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
     private Vector3 moveDirection;
 
-    private PlayerStates state = PlayerStates.Grounded;
+    public PlayerStates state = PlayerStates.Grounded;
 
     private Vector3 initPos;
+
+    private Vector3 initRot;
 
     private bool move = false;
 
@@ -35,6 +37,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false; // Desactivamos la gravedad predeterminada
         initPos = transform.position;
+        initRot = transform.eulerAngles;
 
         // Inicia el movimiento hacia la derecha (eje X global positivo)
         moveDirection = Vector3.right;
@@ -94,6 +97,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
             case "LevelFinish":
                 // Reiniciar posición al inicio
                 transform.position = initPos;
+                transform.eulerAngles = initRot;
                 SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
                 levelFinish.Invoke();
                 break;
@@ -101,6 +105,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
             case "Spikes":
                 // Reiniciar posición al inicio
                 transform.position = initPos; //por si te pilla en medio de un salto
+                transform.eulerAngles = initRot;
                 SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
                 break;
             case "JumpTrigger":
