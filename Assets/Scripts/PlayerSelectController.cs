@@ -62,8 +62,11 @@ public class PlayerSelectController : MonoBehaviour
 
     public void ChangePlayer(int player)
     {
-        changePlayer = true;
-        selectedPlayer = player;
-        playerText.text = playerNames[selectedPlayer];
+        if (!changePlayer)
+        {
+            changePlayer = true;
+            selectedPlayer = player;
+            playerText.text = playerNames[selectedPlayer];
+        }
     }
 }

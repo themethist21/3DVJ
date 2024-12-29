@@ -18,4 +18,4 @@ MonoBehaviour:
   jumpForce: 20
   jumpHeight: 3
   jumpTimeToApex: 0.3
-  playerSpeed: 7
+  playerSpeed: 9
