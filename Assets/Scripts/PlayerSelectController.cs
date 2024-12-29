@@ -6,6 +6,8 @@ public class PlayerSelectController : MonoBehaviour
 {
     [SerializeField] private Transform player1;
     [SerializeField] private Transform player2;
+
+    [SerializeField] private Transform player3;
     [SerializeField] private float changeSpeed;
     [SerializeField] private float initHeight;
     public TextMeshProUGUI playerText;
@@ -26,7 +28,9 @@ public class PlayerSelectController : MonoBehaviour
         players.Add(player1);
         playerNames.Add("DOG");
         players.Add(player2);
-        playerNames.Add("???");
+        playerNames.Add("PANDA");
+        players.Add(player3);
+        playerNames.Add("WOLF");
     }
 
     
