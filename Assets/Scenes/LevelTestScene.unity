@@ -1558,6 +1558,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 837902381513192032, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
+      propertyPath: dogoPrefab
+      value: 
+      objectReference: {fileID: 4841366182469829402, guid: 658b9acaf83978149bc4a9b0bd4e7d8b, type: 3}
+    - target: {fileID: 837902381513192032, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
+      propertyPath: loboPrefab
+      value: 
+      objectReference: {fileID: 7083490246191823173, guid: b6d28ce5bbd51fb4e8bbadf581a34ab5, type: 3}
+    - target: {fileID: 837902381513192032, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
+      propertyPath: pandaPrefab
+      value: 
+      objectReference: {fileID: 2230033963581833258, guid: b0f85221cc75b0a4a939e39d0a095d37, type: 3}
     - target: {fileID: 2396254272177406295, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
       propertyPath: m_IsTrigger
       value: 0
@@ -1631,7 +1643,8 @@ PrefabInstance:
     - {fileID: 4862971369271676160, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
     - {fileID: 353867682027715054, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
     - {fileID: 6371999034782385670, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2663594915165922590, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 626d1a0535b9d3f478537649d72ac258, type: 3}

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
 
 public enum PlayerStates
 {
@@ -20,7 +21,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
     private Vector3 moveDirection;
 
-    public PlayerStates state = PlayerStates.Grounded;
+    private Animator animator;
 
     private Vector3 initPos;
 
@@ -28,17 +29,112 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
     private bool move = false;
 
+    public PlayerStates state = PlayerStates.Grounded;
+
     public float rayDistance = 2f;
 
     public UnityEvent levelFinish;
+
+    public string characterName;
+
+    public GameObject dogoPrefab; // Prefab para Dogo
+    public GameObject loboPrefab; // Prefab para Lobo
+    public GameObject pandaPrefab; // Prefab para Panda
+
+    private GameObject prefabToInstantiate; // Prefab a instanciar
+
+    public GameObject dieChildPrefab; // Prefab del nuevo hijo 
+
+
+
+    
+
+    /*public void changeModeltoDie(){
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+            switch(child.name)
+            {
+                case "Dogo":
+                    Instantiate(dieChildPrefab, transform.position, Quaternion.identity, transform);
+                    break;
+                case "Lobo":
+                    Instantiate(dieChildPrefab, transform.position, Quaternion.identity, transform);
+                    break;
+                case "Panda":
+                    Instantiate(dieChildPrefab, transform.position, Quaternion.identity, transform);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }*/
+
+    /*public void changeModeltoAlive(){
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+            switch(child.name)
+            {
+                case "Dogo":
+                    Instantiate(originalChildPrefab, transform.position, Quaternion.identity, transform);
+                    break;
+                case "Lobo":
+                    Instantiate(originalChildPrefab, transform.position, Quaternion.identity, transform);
+                    break;
+                case "Panda":
+                    Instantiate(originalChildPrefab, transform.position, Quaternion.identity, transform);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }*/
     
     void Start()
-    {
+    {        
+        switch (characterName)
+        {
+            case "Dogo":
+                prefabToInstantiate = dogoPrefab;
+                break;
+            case "Lobo":
+                prefabToInstantiate = loboPrefab;
+                break;
+            case "Panda":
+                prefabToInstantiate = pandaPrefab;
+                break;
+
+            default:
+                Debug.LogWarning("No se encontró un prefab para: " + characterName);
+                return;
+        }
+
+
+        // Si el prefab existe, instanciarlo y hacerlo hijo
+        if (prefabToInstantiate != null)
+        {
+            GameObject instantiatedChild = Instantiate(prefabToInstantiate, transform);
+            instantiatedChild.transform.localPosition = new Vector3(0.167f, 0, 0); // Ajustar posición relativa al padre
+            instantiatedChild.transform.localRotation = Quaternion.Euler(0, -90, 0); // Ajustar rotación relativa al padre
+            instantiatedChild.SetActive(true);
+
+            Transform childWithAnimator = instantiatedChild.transform.GetChild(0);
+
+            childWithAnimator.gameObject.SetActive(true);
+
+            animator = childWithAnimator.GetComponent<Animator>();
+
+        }
+
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false; // Desactivamos la gravedad predeterminada
         initPos = transform.position;
         initRot = transform.eulerAngles;
 
+        
         // Inicia el movimiento hacia la derecha (eje X global positivo)
         moveDirection = Vector3.right;
 
@@ -121,6 +217,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
     {
         // Aplicar fuerza de salto
         Debug.Log("Saltando...");
+        animator.SetTrigger("JumpTrigger");
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reiniciar velocidad vertical
         rb.AddForce(Vector3.up * Data.jumpForce, ForceMode.Impulse);
         state = PlayerStates.Jump;
