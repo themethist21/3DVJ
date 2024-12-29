@@ -16,7 +16,7 @@ public class PlayerAnimations : MonoBehaviour
 
         // Ajusta la velocidad para que la animación dure 2 segundos
         float originalDuration = 3.160f; // Duración original de la animación (en segundos)
-        float desiredDuration = 0.5f;  // Duración deseada de la animación
+        float desiredDuration = 1f;  // Duración deseada de la animación
         animator.SetFloat("Multiplier", originalDuration / desiredDuration);
     }
 
