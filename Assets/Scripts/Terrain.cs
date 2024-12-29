@@ -11,6 +11,7 @@ public class Terrain : MonoBehaviour
     private GameObject renderedObject;
 
     private float moveVelocity = 7.0f;
+    public float downVelocity = 7.0f;
     private float downHeight = -8.0f;
     private float bounceVelocity = 5.0f;
     private float bounceHeight = 0.5f;
@@ -75,7 +76,7 @@ public class Terrain : MonoBehaviour
         {
             if (renderedObject.transform.position.y > downHeight)
             {
-                renderedObject.transform.Translate(moveVelocity * Time.deltaTime * Vector3.down);
+                renderedObject.transform.Translate(downVelocity * Time.deltaTime * Vector3.down);
             }
             else
             {
