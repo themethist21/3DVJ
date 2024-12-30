@@ -12,9 +12,12 @@ TagManager:
   - Spikes
   - Obstacle
   - Terrain
+  - Decoration
+  - Coin
   - Stage1
   - Stage2
-  - Coin
+  - Stage3
+  - Stage4
   layers:
   - Default
   - TransparentFX
