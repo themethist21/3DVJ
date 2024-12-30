@@ -94,16 +94,17 @@ public class PlayerMovementHorizontal : MonoBehaviour
     }*/
     
     void Start()
-    {        
+    {
+        characterName = PlayerPrefs.GetString("playerModel");
         switch (characterName)
         {
-            case "Dogo":
+            case "DOG":
                 prefabToInstantiate = dogoPrefab;
                 break;
-            case "Lobo":
+            case "WOLF":
                 prefabToInstantiate = loboPrefab;
                 break;
-            case "Panda":
+            case "PANDA":
                 prefabToInstantiate = pandaPrefab;
                 break;
 

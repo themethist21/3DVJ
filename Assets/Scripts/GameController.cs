@@ -70,6 +70,13 @@ public class GameController : MonoBehaviour
             obstacleSpawn.AddListener(obj.GetComponent<Coin>().SetVisible);
         }
 
+        List<GameObject> decor = new List<GameObject>();
+        GameObject.FindGameObjectsWithTag("Decoration", decor);
+        foreach (GameObject obj in decor)
+        {
+            obstacleSpawn.AddListener(obj.GetComponent<Decoration>().SetVisible);
+        }
+
         getStages();
         for (int i = 0; i < stageCount; i++)
         {
@@ -168,7 +175,7 @@ public class GameController : MonoBehaviour
         {
             foreach (var obj in GameObject.FindGameObjectsWithTag("JumpTrigger"))
             {
-                obj.GetComponent<BoxCollider>().enabled = true;
+                obj.GetComponent<BoxCollider>().enabled = b;
             }
         }
     }

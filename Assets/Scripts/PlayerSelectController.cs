@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerSelectController : MonoBehaviour
 {
@@ -67,6 +68,12 @@ public class PlayerSelectController : MonoBehaviour
             changePlayer = true;
             selectedPlayer = player;
             playerText.text = playerNames[selectedPlayer];
+            PlayerPrefs.SetString("playerModel", playerNames[selectedPlayer]);
         }
+    }
+
+    public void LoadLevel()
+    {
+        SceneManager.LoadScene(PlayerPrefs.GetInt("level") + 1);
     }
 }
