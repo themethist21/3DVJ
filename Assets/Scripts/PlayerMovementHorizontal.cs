@@ -44,6 +44,8 @@ public class PlayerMovementHorizontal : MonoBehaviour
     public GameObject loboPrefab; // Prefab para Lobo
     public GameObject pandaPrefab; // Prefab para Panda
 
+    public GameObject Estela; // Prefab para la estela
+
     public GameObject dogoDiePrefab; // Prefab para el hijo que muere
 
     public GameObject loboDiePrefab; // Prefab para el hijo que muere
@@ -98,6 +100,12 @@ public class PlayerMovementHorizontal : MonoBehaviour
         childWithAnimator.gameObject.SetActive(true);
 
         animator = childWithAnimator.GetComponent<Animator>();
+
+        //Ponemos la estela
+        GameObject estela = Instantiate(Estela, transform);
+        estela.transform.localPosition = new Vector3(-0.421f, 0, 0); // Ajustar posición relativa al padre
+        estela.transform.localRotation = Quaternion.Euler(0, 0, 0); // Ajustar rotación relativa al padre
+        estela.SetActive(true);
     }
 
     private void cargarPrefabs(){

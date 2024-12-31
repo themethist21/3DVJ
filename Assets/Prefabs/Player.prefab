@@ -105,6 +105,7 @@ MonoBehaviour:
   dogoPrefab: {fileID: 4841366182469829402, guid: 658b9acaf83978149bc4a9b0bd4e7d8b, type: 3}
   loboPrefab: {fileID: 7083490246191823173, guid: b6d28ce5bbd51fb4e8bbadf581a34ab5, type: 3}
   pandaPrefab: {fileID: 2230033963581833258, guid: b0f85221cc75b0a4a939e39d0a095d37, type: 3}
+  Estela: {fileID: 2613462060424995206, guid: 101a8868c1adc5b40bdaf7526f47b7b5, type: 3}
   dogoDiePrefab: {fileID: 1594274006956971574, guid: 97ebcdc2a0072334e8afeb87995ca36f, type: 3}
   loboDiePrefab: {fileID: 595524864921180587, guid: 9f0649fea8856f046bbc45c13219c194, type: 3}
   pandaDiePrefab: {fileID: 3070002852304260253, guid: 85b545a43522a9b4399c1478f93c11bd, type: 3}
