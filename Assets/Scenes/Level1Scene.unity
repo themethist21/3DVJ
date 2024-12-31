@@ -8651,9 +8651,10 @@ GameObject:
   m_Component:
   - component: {fileID: 697303979}
   - component: {fileID: 697303980}
+  - component: {fileID: 697303981}
   m_Layer: 0
   m_Name: Drop
-  m_TagString: Obstacle
+  m_TagString: Spikes
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8695,6 +8696,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 5, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &697303981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697303978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d0ef1871e8e82f4388ccc42e0ba3694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &698920611 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1103413062050697523, guid: f25fd57783503c64ab4e8d99823a0c77, type: 3}
@@ -14223,9 +14236,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1202588417}
   - component: {fileID: 1202588418}
+  - component: {fileID: 1202588419}
   m_Layer: 0
   m_Name: Drop (1)
-  m_TagString: Obstacle
+  m_TagString: Spikes
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14267,6 +14281,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 5, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1202588419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1202588416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d0ef1871e8e82f4388ccc42e0ba3694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1206922857 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1103413062050697523, guid: f21f2c4d10d164949b7086663eb64c6d, type: 3}
