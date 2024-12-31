@@ -225,24 +225,25 @@ public class PlayerMovementHorizontal : MonoBehaviour
                     PositionOnBlock();
                     break;
 
-            case "LevelFinish":
-                transform.GetChild(0).gameObject.SetActive(false);
-                // Reiniciar posición al inicio
-                transform.position = initPos;
-                transform.eulerAngles = initRot;
-                SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
-                stageFinish.Invoke();
-                transform.GetChild(0).gameObject.SetActive(true);
-                break;
+                case "LevelFinish":
+                    transform.GetChild(0).gameObject.SetActive(false);
+                    // Reiniciar posición al inicio
+                    transform.position = initPos;
+                    transform.eulerAngles = initRot;
+                    SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
+                    stageFinish.Invoke();
+                    transform.GetChild(0).gameObject.SetActive(true);
+                    break;
 
-                case "Spikes":
-
-                
+                 case "Spikes":
                     // 1. Llama a una Corrutina
                     
                     Debug.Log("RUNNING INTO SPIKES");
                     StartCoroutine(SpikeSequence());
                     
+                    break;
+                case "Obstacle":
+                    StartCoroutine(SpikeSequence());
                     break;
                 case "JumpTrigger":
                     lastJumpInputTimer = Data.jumpInputBufferTime;
