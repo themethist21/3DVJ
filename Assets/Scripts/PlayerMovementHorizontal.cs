@@ -28,12 +28,14 @@ public class PlayerMovementHorizontal : MonoBehaviour
     private Vector3 initRot;
 
     private bool move = false;
+    private bool gamePaused = false;
 
     public PlayerStates state = PlayerStates.Grounded;
 
     public float rayDistance = 2f;
 
-    public UnityEvent levelFinish;
+    public UnityEvent playerLose;
+    public UnityEvent stageFinish;
 
     public string characterName;
 
@@ -141,7 +143,9 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
         // Inicia los listeners
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().playerRun.AddListener(this.SetMove);
-        levelFinish.AddListener(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().PlayerEndStage);
+        stageFinish.AddListener(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().PlayerEndStage);
+        playerLose.AddListener(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().PlayerLose);
+        playerLose.AddListener(GameObject.FindGameObjectWithTag("UIController").GetComponent<UIController>().ShowLoseMenu);
     }
 
     void Update()
@@ -156,7 +160,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
         //Input
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !gamePaused)
         {
             lastJumpInputTimer = Data.jumpInputBufferTime;
         }
@@ -192,18 +196,30 @@ public class PlayerMovementHorizontal : MonoBehaviour
                 break;
 
             case "LevelFinish":
+                transform.GetChild(0).gameObject.SetActive(false);
                 // Reiniciar posición al inicio
                 transform.position = initPos;
                 transform.eulerAngles = initRot;
                 SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
-                levelFinish.Invoke();
+                stageFinish.Invoke();
+                transform.GetChild(0).gameObject.SetActive(true);
                 break;
 
             case "Spikes":
                 // Reiniciar posición al inicio
+                transform.GetChild(0).gameObject.SetActive(false);
                 transform.position = initPos; //por si te pilla en medio de un salto
                 transform.eulerAngles = initRot;
                 SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
+                playerLose.Invoke();
+                break;
+            case "Obstacle":
+                // Reiniciar posición al inicio
+                transform.GetChild(0).gameObject.SetActive(false);
+                transform.position = initPos; //por si te pilla en medio de un salto
+                transform.eulerAngles = initRot;
+                SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
+                playerLose.Invoke();
                 break;
             case "JumpTrigger":
                 lastJumpInputTimer = Data.jumpInputBufferTime;
@@ -300,5 +316,10 @@ public class PlayerMovementHorizontal : MonoBehaviour
     public void SetMove(bool b)
     { 
         move = b;
+    }
+
+    public void SetGamePaused(bool b)
+    {
+        gamePaused = b;
     }
 }

@@ -12,7 +12,8 @@ public enum StageStates
     Spawning,
     Spawned,
     Despawn,
-    Cleanup
+    Cleanup,
+    End
 }
 
 public class GameController : MonoBehaviour
@@ -27,11 +28,14 @@ public class GameController : MonoBehaviour
     public int score { get; private set;}
 
     private bool godMode = false;
+    private bool gamePaused = false;
 
     //Events
     public UnityEvent<bool> terrainSpawn;
     public UnityEvent<bool> obstacleSpawn;
     public UnityEvent<bool> playerRun;
+    public UnityEvent levelFinish;
+    public UnityEvent<bool> pauseGame;
 
     //Timers
     private float stageSpawnTimer;
@@ -77,6 +81,10 @@ public class GameController : MonoBehaviour
             obstacleSpawn.AddListener(obj.GetComponent<Decoration>().SetVisible);
         }
 
+        levelFinish.AddListener(GameObject.FindGameObjectWithTag("UIController").GetComponent<UIController>().ShowWinMenu);
+        pauseGame.AddListener(GameObject.FindGameObjectWithTag("UIController").GetComponent<UIController>().PauseGameMenu);
+        pauseGame.AddListener(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovementHorizontal>().SetGamePaused);
+
         getStages();
         for (int i = 0; i < stageCount; i++)
         {
@@ -87,25 +95,7 @@ public class GameController : MonoBehaviour
     private void Update()
     {
         stageSpawnTimer -= Time.deltaTime;
-        obstacleSpawnTimer -= Time.deltaTime;    
-
-        if (Input.GetKeyUp(KeyCode.Q))
-        {
-            terrainSpawn.Invoke(true);
-        }
-        else if (Input.GetKeyUp(KeyCode.W))
-        {
-            terrainSpawn.Invoke(false);
-        }
-
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            obstacleSpawn.Invoke(true);
-        }
-        else if (Input.GetKeyUp(KeyCode.R))
-        {
-            obstacleSpawn.Invoke(false);
-        }
+        obstacleSpawnTimer -= Time.deltaTime;
 
         if (Input.GetKeyUp(KeyCode.G))
         {
@@ -114,6 +104,10 @@ public class GameController : MonoBehaviour
             {
                 obj.GetComponent<BoxCollider>().enabled = !obj.GetComponent<BoxCollider>().enabled;
             }
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseGame();        
         }
 
 
@@ -151,10 +145,16 @@ public class GameController : MonoBehaviour
                 if (stageSpawnTimer < 0)
                 {
                     ShowStage(currentStage, false);
-                    if (currentStage + 1 < stageCount) currentStage++;
-                    currentStageState = StageStates.Despawned;
+                    currentStage++;
+                    if (currentStage == stageCount)
+                    {
+                        PlayerWin();
+                        currentStageState = StageStates.End;
+                    }
+                    else currentStageState = StageStates.Despawned;
                 }
                 break;
+            default: break;
         }
 
     }
@@ -191,5 +191,36 @@ public class GameController : MonoBehaviour
         currentStageState = StageStates.Despawn;
         obstacleSpawn.Invoke(false);
         obstacleSpawnTimer = OBSDESPAWNTIME;
+    }
+
+    public void PlayerLose()
+    {
+        playerRun.Invoke(false);
+    }
+
+    private void PlayerWin()
+    {
+        levelFinish.Invoke();
+    }
+
+    public void PauseGame()
+    {
+        if (!gamePaused)
+        {
+            pauseGame.Invoke(true);
+            PauseTimeScale(true);
+            gamePaused = true;
+        }
+        else
+        {
+            gamePaused = false;
+            pauseGame.Invoke(false);
+        }
+    }
+
+    public void PauseTimeScale (bool b)
+    {
+        if (b) Time.timeScale = 0;
+        else Time.timeScale = 1;
     }
 }
