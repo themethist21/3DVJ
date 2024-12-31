@@ -29,6 +29,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
     private Vector3 initRot;
 
     private bool move = false;
+    private bool gamePaused = false;
 
     private bool alive = true;
 
@@ -36,7 +37,8 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
     public float rayDistance = 2f;
 
-    public UnityEvent levelFinish;
+    public UnityEvent playerLose;
+    public UnityEvent stageFinish;
 
     public string characterName;
 
@@ -162,7 +164,9 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
         // Inicia los listeners
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().playerRun.AddListener(this.SetMove);
-        levelFinish.AddListener(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().PlayerEndStage);
+        stageFinish.AddListener(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().PlayerEndStage);
+        playerLose.AddListener(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().PlayerLose);
+        playerLose.AddListener(GameObject.FindGameObjectWithTag("UIController").GetComponent<UIController>().ShowLoseMenu);
     }
 
     void Update()
@@ -177,7 +181,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
         //Input
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !gamePaused)
         {
             lastJumpInputTimer = Data.jumpInputBufferTime;
         }
@@ -215,24 +219,24 @@ public class PlayerMovementHorizontal : MonoBehaviour
                     break;
 
                 case "LevelFinish":
+                    transform.GetChild(0).gameObject.SetActive(false);
                     // Reiniciar posición al inicio
                     transform.position = initPos;
                     transform.eulerAngles = initRot;
                     SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
-                    foreach (Transform child in transform){
-                        Destroy(child.gameObject); // DESTRUIMOS EL HAZ DE LUZ Y EL MODELO
-                    }
-                    
-                    levelFinish.Invoke();
-
-                    cargarPrefabs(); // Cargamos el hijo vivo
+                    stageFinish.Invoke();
+                    transform.GetChild(0).gameObject.SetActive(true);
                     break;
 
-                case "Spikes":
+                 case "Spikes":
                     // 1. Llama a una Corrutina
                     Debug.Log("RUNNING INTO SPIKES");
                     StartCoroutine(SpikeSequence());
-                    
+                    playerLose.Invoke();
+                    break;
+                case "Obstacle":
+                    StartCoroutine(SpikeSequence());
+                    playerLose.Invoke();
                     break;
                 case "JumpTrigger":
                     lastJumpInputTimer = Data.jumpInputBufferTime;
@@ -398,5 +402,10 @@ public class PlayerMovementHorizontal : MonoBehaviour
     public void SetMove(bool b)
     { 
         move = b;
+    }
+
+    public void SetGamePaused(bool b)
+    {
+        gamePaused = b;
     }
 }
