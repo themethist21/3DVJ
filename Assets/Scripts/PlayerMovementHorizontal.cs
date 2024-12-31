@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum PlayerStates
 {
@@ -30,6 +31,8 @@ public class PlayerMovementHorizontal : MonoBehaviour
     private bool move = false;
     private bool gamePaused = false;
 
+    private bool alive = true;
+
     public PlayerStates state = PlayerStates.Grounded;
 
     public float rayDistance = 2f;
@@ -43,76 +46,97 @@ public class PlayerMovementHorizontal : MonoBehaviour
     public GameObject loboPrefab; // Prefab para Lobo
     public GameObject pandaPrefab; // Prefab para Panda
 
+    public GameObject Estela; // Prefab para la estela
+
+    public GameObject dogoDiePrefab; // Prefab para el hijo que muere
+
+    public GameObject loboDiePrefab; // Prefab para el hijo que muere
+
+    public GameObject pandaDiePrefab; // Prefab para el hijo que muere
+
     private GameObject prefabToInstantiate; // Prefab a instanciar
 
-    public GameObject dieChildPrefab; // Prefab del nuevo hijo 
+    private GameObject DeathPrefabtoInstantiate; // Prefab del nuevo hijo 
 
 
+    private void generarCollisionsyRigidbody(GameObject Diechild){
 
+        Transform childWithPieces = Diechild.transform.GetChild(0);
+        for (int i = 0; i < childWithPieces.childCount; i++)
+        {
+            Transform piece = childWithPieces.GetChild(i);
+            piece.gameObject.AddComponent<Rigidbody>();
+            piece.gameObject.AddComponent<BoxCollider>();
+        }
+
+    }
     
-
-    /*public void changeModeltoDie(){
+    private void changeModeltoDie(){
         foreach (Transform child in transform)
         {
-            Destroy(child.gameObject);
-            switch(child.name)
-            {
-                case "Dogo":
-                    Instantiate(dieChildPrefab, transform.position, Quaternion.identity, transform);
-                    break;
-                case "Lobo":
-                    Instantiate(dieChildPrefab, transform.position, Quaternion.identity, transform);
-                    break;
-                case "Panda":
-                    Instantiate(dieChildPrefab, transform.position, Quaternion.identity, transform);
-                    break;
+            Destroy(child.gameObject); // DESTRUIMOS EL HAZ DE LUZ Y EL MODELO
+        }     
 
-                default:
-                    break;
-            }
-        }
-    }*/
+        GameObject DieChild = Instantiate(DeathPrefabtoInstantiate, transform);
+        DieChild.transform.localPosition = new Vector3(0.167f, 0, 0);; // Ajustar posición relativa al padre
+        DieChild.transform.localRotation = Quaternion.Euler(0, -90, 0); // Ajustar rotación relativa al padre
+        generarCollisionsyRigidbody(DieChild);
 
-    /*public void changeModeltoAlive(){
-        foreach (Transform child in transform)
+    }
+
+    public void changeModeltoAlive(){
+        Destroy(transform.GetChild(0).gameObject); // Destruimos el hijo muerto
+        GameObject instantiatedChild = Instantiate(prefabToInstantiate, transform);
+        instantiatedChild.transform.localPosition = new Vector3(0.167f, 0, 0); // Ajustar posición relativa al padre
+        instantiatedChild.transform.localRotation = Quaternion.Euler(0, -90, 0); // Ajustar rotación relativa al padre
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            Destroy(child.gameObject);
-            switch(child.name)
-            {
-                case "Dogo":
-                    Instantiate(originalChildPrefab, transform.position, Quaternion.identity, transform);
-                    break;
-                case "Lobo":
-                    Instantiate(originalChildPrefab, transform.position, Quaternion.identity, transform);
-                    break;
-                case "Panda":
-                    Instantiate(originalChildPrefab, transform.position, Quaternion.identity, transform);
-                    break;
-
-                default:
-                    break;
-            }
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
         }
-    }*/
-    
-    void Start()
-    {
+        instantiatedChild.SetActive(true);
+
+        Transform childWithAnimator = instantiatedChild.transform.GetChild(0);
+
+        childWithAnimator.gameObject.SetActive(true);
+
+        animator = childWithAnimator.GetComponent<Animator>();
+
+        //Ponemos la estela
+        GameObject estela = Instantiate(Estela, transform);
+        estela.transform.localPosition = new Vector3(-0.421f, 0, 0); // Ajustar posición relativa al padre
+        estela.transform.localRotation = Quaternion.Euler(0, 0, 0); // Ajustar rotación relativa al padre
+        estela.SetActive(true);
+    }
+
+    private void cargarPrefabs(){
         characterName = PlayerPrefs.GetString("playerModel");
         switch (characterName)
         {
             case "DOG":
                 prefabToInstantiate = dogoPrefab;
+                DeathPrefabtoInstantiate = dogoDiePrefab;
                 break;
             case "WOLF":
                 prefabToInstantiate = loboPrefab;
+                DeathPrefabtoInstantiate = loboDiePrefab;
                 break;
             case "PANDA":
                 prefabToInstantiate = pandaPrefab;
+                DeathPrefabtoInstantiate = pandaDiePrefab;
                 break;
 
             default:
                 Debug.LogWarning("No se encontró un prefab para: " + characterName);
                 return;
+        }
+
+        if (DeathPrefabtoInstantiate == null)
+        {
+            Debug.LogWarning("No se encontró un prefab para: " + characterName);
+        }else{
+            Debug.Log("Se encontro el prefab para " + characterName);
         }
 
 
@@ -131,13 +155,17 @@ public class PlayerMovementHorizontal : MonoBehaviour
             animator = childWithAnimator.GetComponent<Animator>();
 
         }
+    }
+    
+    void Start()
+    {
+        cargarPrefabs();
 
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false; // Desactivamos la gravedad predeterminada
         initPos = transform.position;
         initRot = transform.eulerAngles;
 
-        
         // Inicia el movimiento hacia la derecha (eje X global positivo)
         moveDirection = Vector3.right;
 
@@ -181,19 +209,21 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        switch (other.tag)
-        {
-            case "LeftTurn":
-                // Girar hacia la izquierda: 90 grados negativos
-                RotateGlobal(-90);
-                PositionOnBlock();
-                break;
+        if (alive){ // Si el jugador está vivo
 
-            case "RightTurn":
-                // Girar hacia la derecha: 90 grados positivos
-                RotateGlobal(90);
-                PositionOnBlock();
-                break;
+            switch (other.tag)
+            {
+                case "LeftTurn":
+                    // Girar hacia la izquierda: 90 grados negativos
+                    RotateGlobal(-90);
+                    PositionOnBlock();
+                    break;
+
+                case "RightTurn":
+                    // Girar hacia la derecha: 90 grados positivos
+                    RotateGlobal(90);
+                    PositionOnBlock();
+                    break;
 
             case "LevelFinish":
                 transform.GetChild(0).gameObject.SetActive(false);
@@ -205,40 +235,62 @@ public class PlayerMovementHorizontal : MonoBehaviour
                 transform.GetChild(0).gameObject.SetActive(true);
                 break;
 
-            case "Spikes":
-                // Reiniciar posición al inicio
-                transform.GetChild(0).gameObject.SetActive(false);
-                transform.position = initPos; //por si te pilla en medio de un salto
-                transform.eulerAngles = initRot;
-                SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
-                playerLose.Invoke();
-                break;
-            case "Obstacle":
-                // Reiniciar posición al inicio
-                transform.GetChild(0).gameObject.SetActive(false);
-                transform.position = initPos; //por si te pilla en medio de un salto
-                transform.eulerAngles = initRot;
-                SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
-                playerLose.Invoke();
-                break;
-            case "JumpTrigger":
-                lastJumpInputTimer = Data.jumpInputBufferTime;
-                break;
+                case "Spikes":
 
-            default:
-                break;
+                
+                    // 1. Llama a una Corrutina
+                    
+                    Debug.Log("RUNNING INTO SPIKES");
+                    StartCoroutine(SpikeSequence());
+                    
+                    break;
+                case "JumpTrigger":
+                    lastJumpInputTimer = Data.jumpInputBufferTime;
+                    break;
+
+                default:
+                    break;
+            }
         }
+    }
+
+    private IEnumerator SpikeSequence()
+    {
+        // 2. Cambia al modelo de “muerto”
+        SetMove(false);
+        
+        changeModeltoDie();
+
+        alive = false;
+        
+        // 3. Espera 2 segundos
+        yield return new WaitForSeconds(1.5f);
+
+        SetMove(true);
+        // 4. Aquí pones el código que quieres tras la espera
+        transform.position = initPos; //por si te pilla en medio de un salto
+        transform.eulerAngles = initRot;
+        SetmoveDirection(Vector3.right);
+
+        changeModeltoAlive();
+
+        alive = true;
+
+        yield return null;
     }
 
     private void Jump()
     {
         // Aplicar fuerza de salto
-        Debug.Log("Saltando...");
-        animator.SetTrigger("JumpTrigger");
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reiniciar velocidad vertical
-        rb.AddForce(Vector3.up * Data.jumpForce, ForceMode.Impulse);
-        state = PlayerStates.Jump;
-        Debug.Log("Estado después de saltar: " + state);
+       
+        if (animator != null){
+            Debug.Log("Saltando...");
+            animator.SetTrigger("JumpTrigger");
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reiniciar velocidad vertical
+            rb.AddForce(Vector3.up * Data.jumpForce, ForceMode.Impulse);
+            state = PlayerStates.Jump;
+            Debug.Log("Estado después de saltar: " + state);
+        } 
     }
 
     void OnCollisionEnter(Collision collision)
