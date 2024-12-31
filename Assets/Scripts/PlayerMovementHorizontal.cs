@@ -240,10 +240,11 @@ public class PlayerMovementHorizontal : MonoBehaviour
                     
                     Debug.Log("RUNNING INTO SPIKES");
                     StartCoroutine(SpikeSequence());
-                    
+                    playerLose.Invoke();
                     break;
                 case "Obstacle":
                     StartCoroutine(SpikeSequence());
+                    playerLose.Invoke();
                     break;
                 case "JumpTrigger":
                     lastJumpInputTimer = Data.jumpInputBufferTime;
@@ -267,7 +268,6 @@ public class PlayerMovementHorizontal : MonoBehaviour
         // 3. Espera 2 segundos
         yield return new WaitForSeconds(1.5f);
 
-        SetMove(true);
         // 4. Aquí pones el código que quieres tras la espera
         transform.position = initPos; //por si te pilla en medio de un salto
         transform.eulerAngles = initRot;
