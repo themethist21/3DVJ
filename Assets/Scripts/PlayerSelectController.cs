@@ -24,6 +24,7 @@ public class PlayerSelectController : MonoBehaviour
     {
         currentPlayer = selectedPlayer = 0;
         changePlayer = false;
+        
         players = new List<Transform>();
         playerNames = new List<string>();
         players.Add(player1);
@@ -32,6 +33,15 @@ public class PlayerSelectController : MonoBehaviour
         playerNames.Add("PANDA");
         players.Add(player3);
         playerNames.Add("WOLF");
+
+        string model = PlayerPrefs.GetString("playerModel");
+        switch (model)
+        {
+            case "DOG": ChangePlayer(0); break;
+            case "PANDA": ChangePlayer(1); break;
+            case "WOLF": ChangePlayer(2); break;
+            default: break;
+        }
     }
 
     
