@@ -236,7 +236,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
                  case "Spikes":
                     // 1. Llama a una Corrutina
                     Debug.Log("RUNNING INTO SPIKES");
-                    StartCoroutine(SpikeSequence());
+                    SpikeSequence();
                     playerLose.Invoke();
                     break;
 
@@ -247,7 +247,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
                 case "Sea":
                     // Reiniciar posición al inicio
                     Debug.Log("RUNNING INTO SEA");
-                    StartCoroutine(SplashSequence());
+                    SplashSequence();
                     playerLose.Invoke();
                     /*transform.position = initPos;
                     transform.eulerAngles = initRot;
@@ -260,7 +260,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
         }
     }
 
-    private IEnumerator SplashSequence (){
+    private void SplashSequence (){
         if (splashPrefab != null)
         {
             alive = false;
@@ -275,7 +275,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
                 Destroy(child.gameObject); // DESTRUIMOS EL HAZ DE LUZ Y EL MODELO
             }    
 
-           // yield return new WaitForSeconds(1.5f);
+            //yield return new WaitForSeconds(1.5f);
 
             
             /*transform.position = initPos; //por si te pilla en medio de un salto
@@ -290,7 +290,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
     }
 
 
-    private IEnumerator SpikeSequence()
+    private void SpikeSequence()
     {
         // 2. Cambia al modelo de “muerto”
         SetMove(false);
@@ -300,7 +300,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
         alive = false;
         
         // 3. Espera 1.5 segundos
-       // yield return new WaitForSeconds(1.5f);
+        //yield return new WaitForSeconds(1.5f);
 
        /* SetMove(true);
 
