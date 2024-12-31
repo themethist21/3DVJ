@@ -219,13 +219,18 @@ public class PlayerMovementHorizontal : MonoBehaviour
                     break;
 
                 case "LevelFinish":
-                    transform.GetChild(0).gameObject.SetActive(false);
+                    //transform.GetChild(0).gameObject.SetActive(false);
                     // Reiniciar posición al inicio
                     transform.position = initPos;
                     transform.eulerAngles = initRot;
                     SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
+                    foreach (Transform child in transform)
+                    {
+                        Destroy(child.gameObject); // DESTRUIMOS EL HAZ DE LUZ Y EL MODELO
+                    }
                     stageFinish.Invoke();
-                    transform.GetChild(0).gameObject.SetActive(true);
+                    cargarPrefabs(); // Cargamos el hijo vivo
+                    //transform.GetChild(0).gameObject.SetActive(true);
                     break;
 
                  case "Spikes":
@@ -234,10 +239,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
                     StartCoroutine(SpikeSequence());
                     playerLose.Invoke();
                     break;
-                case "Obstacle":
-                    StartCoroutine(SpikeSequence());
-                    playerLose.Invoke();
-                    break;
+
                 case "JumpTrigger":
                     lastJumpInputTimer = Data.jumpInputBufferTime;
                     break;
@@ -246,6 +248,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
                     // Reiniciar posición al inicio
                     Debug.Log("RUNNING INTO SEA");
                     StartCoroutine(SplashSequence());
+                    playerLose.Invoke();
                     /*transform.position = initPos;
                     transform.eulerAngles = initRot;
                     SetmoveDirection(Vector3.right);*/ // Reinicia dirección hacia la derecha
