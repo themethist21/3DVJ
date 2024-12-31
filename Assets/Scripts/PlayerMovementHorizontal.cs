@@ -44,6 +44,8 @@ public class PlayerMovementHorizontal : MonoBehaviour
     public GameObject loboPrefab; // Prefab para Lobo
     public GameObject pandaPrefab; // Prefab para Panda
 
+    public GameObject splashPrefab; // Prefab para la animación de salpicadura
+
     public GameObject Estela; // Prefab para la estela
 
     public GameObject dogoDiePrefab; // Prefab para el hijo que muere
@@ -82,32 +84,6 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
     }
 
-    public void changeModeltoAlive(){
-        Destroy(transform.GetChild(0).gameObject); // Destruimos el hijo muerto
-        GameObject instantiatedChild = Instantiate(prefabToInstantiate, transform);
-        instantiatedChild.transform.localPosition = new Vector3(0.167f, 0, 0); // Ajustar posición relativa al padre
-        instantiatedChild.transform.localRotation = Quaternion.Euler(0, -90, 0); // Ajustar rotación relativa al padre
-        Rigidbody rb = GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
-        instantiatedChild.SetActive(true);
-
-        Transform childWithAnimator = instantiatedChild.transform.GetChild(0);
-
-        childWithAnimator.gameObject.SetActive(true);
-
-        animator = childWithAnimator.GetComponent<Animator>();
-
-        //Ponemos la estela
-        GameObject estela = Instantiate(Estela, transform);
-        estela.transform.localPosition = new Vector3(-0.421f, 0, 0); // Ajustar posición relativa al padre
-        estela.transform.localRotation = Quaternion.Euler(0, 0, 0); // Ajustar rotación relativa al padre
-        estela.SetActive(true);
-    }
-
     private void cargarPrefabs(){
         characterName = PlayerPrefs.GetString("playerModel");
         switch (characterName)
@@ -137,6 +113,11 @@ public class PlayerMovementHorizontal : MonoBehaviour
             Debug.Log("Se encontro el prefab para " + characterName);
         }
 
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
 
         // Si el prefab existe, instanciarlo y hacerlo hijo
         if (prefabToInstantiate != null)
@@ -152,6 +133,18 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
             animator = childWithAnimator.GetComponent<Animator>();
 
+        }else {
+            Debug.LogWarning("No se encontró un prefab para: " + characterName);
+        }
+
+        if (Estela != null){
+            //Ponemos la estela
+            GameObject estela = Instantiate(Estela, transform);
+            estela.transform.localPosition = new Vector3(-0.421f, 0, 0); // Ajustar posición relativa al padre
+            estela.transform.localRotation = Quaternion.Euler(0, 0, 0); // Ajustar rotación relativa al padre
+            estela.SetActive(true);
+        }else{
+            Debug.LogWarning("No se encontró un prefab para la estela");
         }
     }
     
@@ -226,14 +219,17 @@ public class PlayerMovementHorizontal : MonoBehaviour
                     transform.position = initPos;
                     transform.eulerAngles = initRot;
                     SetmoveDirection(Vector3.right); // Reinicia dirección hacia la derecha
+                    foreach (Transform child in transform){
+                        Destroy(child.gameObject); // DESTRUIMOS EL HAZ DE LUZ Y EL MODELO
+                    }
+                    
                     levelFinish.Invoke();
+
+                    cargarPrefabs(); // Cargamos el hijo vivo
                     break;
 
                 case "Spikes":
-
-                
                     // 1. Llama a una Corrutina
-                    
                     Debug.Log("RUNNING INTO SPIKES");
                     StartCoroutine(SpikeSequence());
                     
@@ -242,11 +238,50 @@ public class PlayerMovementHorizontal : MonoBehaviour
                     lastJumpInputTimer = Data.jumpInputBufferTime;
                     break;
 
+                case "Sea":
+                    // Reiniciar posición al inicio
+                    Debug.Log("RUNNING INTO SEA");
+                    StartCoroutine(SplashSequence());
+                    /*transform.position = initPos;
+                    transform.eulerAngles = initRot;
+                    SetmoveDirection(Vector3.right);*/ // Reinicia dirección hacia la derecha
+                    break;
+
                 default:
                     break;
             }
         }
     }
+
+    private IEnumerator SplashSequence (){
+        if (splashPrefab != null)
+        {
+            alive = false;
+
+            GameObject splash = Instantiate(splashPrefab); // Instanciar el splash sin padre
+            splash.transform.position = transform.position; // Colocar en la posición global del jugador
+            splash.transform.rotation = Quaternion.Euler(-90, 0, 0); // Ajustar la rotación deseada
+            splash.SetActive(true);
+
+            foreach (Transform child in transform)
+            {
+                Destroy(child.gameObject); // DESTRUIMOS EL HAZ DE LUZ Y EL MODELO
+            }    
+
+            yield return new WaitForSeconds(1.5f);
+
+            
+            transform.position = initPos; //por si te pilla en medio de un salto
+            transform.eulerAngles = initRot;
+            SetmoveDirection(Vector3.right);
+
+            cargarPrefabs(); // Cargamos el hijo vivo
+
+            alive = true;
+            
+        }
+    }
+
 
     private IEnumerator SpikeSequence()
     {
@@ -261,12 +296,13 @@ public class PlayerMovementHorizontal : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
 
         SetMove(true);
-        // 4. Aquí pones el código que quieres tras la espera
+
         transform.position = initPos; //por si te pilla en medio de un salto
         transform.eulerAngles = initRot;
         SetmoveDirection(Vector3.right);
 
-        changeModeltoAlive();
+        Destroy(transform.GetChild(0).gameObject); // Destruimos el hijo muerto
+        cargarPrefabs(); // Cargamos el hijo vivo
 
         alive = true;
 
