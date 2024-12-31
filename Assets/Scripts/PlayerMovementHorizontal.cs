@@ -275,16 +275,16 @@ public class PlayerMovementHorizontal : MonoBehaviour
                 Destroy(child.gameObject); // DESTRUIMOS EL HAZ DE LUZ Y EL MODELO
             }    
 
-            yield return new WaitForSeconds(1.5f);
+           // yield return new WaitForSeconds(1.5f);
 
             
-            transform.position = initPos; //por si te pilla en medio de un salto
+            /*transform.position = initPos; //por si te pilla en medio de un salto
             transform.eulerAngles = initRot;
             SetmoveDirection(Vector3.right);
 
             cargarPrefabs(); // Cargamos el hijo vivo
 
-            alive = true;
+            alive = true;*/
             
         }
     }
@@ -299,10 +299,10 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
         alive = false;
         
-        // 3. Espera 2 segundos
-        yield return new WaitForSeconds(1.5f);
+        // 3. Espera 1.5 segundos
+       // yield return new WaitForSeconds(1.5f);
 
-        SetMove(true);
+       /* SetMove(true);
 
         transform.position = initPos; //por si te pilla en medio de un salto
         transform.eulerAngles = initRot;
@@ -313,7 +313,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
         alive = true;
 
-        yield return null;
+        yield return null;*/
     }
 
     private void Jump()
