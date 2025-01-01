@@ -41,7 +41,7 @@ public class Coin : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             if (SoundManager.Instance != null)
-                SoundManager.Instance.PlaySFX("coin", 0.5f);
+                SoundManager.Instance.PlaySFX("coin", 0.3f); // Reproducir sonido de moneda
             collectCoin.Invoke();
             Destroy(gameObject);
         }

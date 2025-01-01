@@ -130,6 +130,10 @@ public class UIController : MonoBehaviour
     public void RestartScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //De momento lvl 1
+        SoundManager.Instance.StopMusic();
+        float delayInSeconds = 2.6f; // Retraso de x segundos
+        SoundManager.Instance.PlayMusic("lvl1music", 0.4f, delayInSeconds);
     }
 
     public void ReturnToMainMenu()

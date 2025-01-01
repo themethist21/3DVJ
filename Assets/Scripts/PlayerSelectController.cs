@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PlayerSelectController : MonoBehaviour
 {
@@ -85,5 +86,12 @@ public class PlayerSelectController : MonoBehaviour
     public void LoadLevel()
     {
         SceneManager.LoadScene(PlayerPrefs.GetInt("level") + 1);
+        //Detener música del menú
+        SoundManager.Instance.StopMusic();
+        //Musica lvl 1
+        float delayInSeconds = 2.1f; // Retraso de 2 segundos
+        SoundManager.Instance.PlayMusic("lvl1music", 0.4f, delayInSeconds);
+        
     }
+
 }

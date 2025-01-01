@@ -73,7 +73,7 @@ public class SoundManager : MonoBehaviour
     }
 
     // Reproducir música
-    public void PlayMusic(string clipName, float volume = 1.0f)
+    public void PlayMusic(string clipName, float volume = 1.0f, float delayInSeconds = 0.0f)
     {
         AudioClip clip = GetClipByName(clipName);
         if (clip != null && musicSource != null)
@@ -81,7 +81,7 @@ public class SoundManager : MonoBehaviour
             musicSource.clip = clip;
             musicSource.volume = Mathf.Clamp01(volume); // Asegura que esté entre 0 y 1
             musicSource.loop = true;
-            musicSource.Play();
+            musicSource.PlayDelayed(delayInSeconds); // Retraso opcional
         }
         else
         {
