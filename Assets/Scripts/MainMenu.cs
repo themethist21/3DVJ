@@ -4,14 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    void Start()
-    {
-        if (SoundManager.Instance != null)
-        {
-            SoundManager.Instance.PlayMusic("ambient", 0.5f);
-        }
-    }
-
     [SerializeField] private TextMeshProUGUI level1Perc;
 
     public void QuitGame()
@@ -21,6 +13,11 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayMusic("ambient", 0.5f);
+        }
+        
         level1Perc.text = PlayerPrefs.GetFloat("level1Best").ToString("0") + "%";
     }
 
