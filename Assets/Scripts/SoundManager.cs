@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class SoundManager : MonoBehaviour
 {
@@ -19,6 +22,8 @@ public class SoundManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // Persistir entre escenas
+            // Suscribirse al evento de cambio de escena
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -75,12 +80,19 @@ public class SoundManager : MonoBehaviour
         {
             musicSource.clip = clip;
             musicSource.volume = Mathf.Clamp01(volume); // Asegura que esté entre 0 y 1
+            musicSource.loop = true;
             musicSource.Play();
         }
         else
         {
             Debug.LogWarning($"Clip '{clipName}' no encontrado o AudioSource no asignado.");
         }
+    }
+
+    // Detener música
+    public void StopMusic()
+    {
+        musicSource.Stop();
     }
 
     // Buscar clip por nombre
@@ -91,6 +103,34 @@ public class SoundManager : MonoBehaviour
             if (clip.name == clipName)
                 return clip;
         }
+        Debug.LogWarning($"Clip '{clipName}' no encontrado.");
+
+
         return null;
     }
+
+    public void AssignButtonClickSounds()
+    {
+        // Encuentra todos los botones ahora que todos los objetos están activos
+        Button[] buttons = FindObjectsOfType<Button>(true);
+
+        foreach (Button button in buttons)
+        {            
+            GameObject parent = button.gameObject;
+
+            button.onClick.AddListener(() => PlaySFX("click"));       
+        }
+    }
+
+
+    private void OnDestroy() //Se ejecuta cuando el objeto es destruido (por si acaso)
+    {
+        // Desuscribirse del evento para evitar errores
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        AssignButtonClickSounds(); // Asigna sonidos a los botones de la nueva escena
+    }
+
 }

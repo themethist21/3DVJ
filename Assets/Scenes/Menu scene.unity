@@ -2664,6 +2664,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SoundManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2011241005976969150, guid: 23b8bd29e31bf45439ff056ccbb58c3f, type: 3}
+      propertyPath: soundClips.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2011241005976969150, guid: 23b8bd29e31bf45439ff056ccbb58c3f, type: 3}
+      propertyPath: 'soundClips.Array.data[8]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 5bd2218d1544e814ba88ef89d8b9a17e, type: 3}
     - target: {fileID: 4516105834291230020, guid: 23b8bd29e31bf45439ff056ccbb58c3f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.894385

@@ -295,6 +295,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
        
         if (animator != null){
             Debug.Log("Saltando...");
+            SoundManager.Instance.PlaySFX("jump", .5f);
             animator.SetTrigger("JumpTrigger");
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reiniciar velocidad vertical
             rb.AddForce(Vector3.up * Data.jumpForce, ForceMode.Impulse);
