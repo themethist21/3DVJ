@@ -20,11 +20,12 @@ public class UIController : MonoBehaviour
     private const float PAUSEEXITTIME = 2f;
 
     [SerializeField] private TextMeshProUGUI scoreText1, scoreText2;
-    [SerializeField] private TextMeshProUGUI loseScore;
+    [SerializeField] private TextMeshProUGUI loseScore, losePercentage, bestPercentage;
     [SerializeField] private TextMeshProUGUI winScore;
     [SerializeField] private TextMeshProUGUI pauseExitText;
+    [SerializeField] private TextMeshProUGUI percText1, percText2;
 
-    [SerializeField] private GameObject loseMenu;
+    [SerializeField] private GameObject loseMenu, newBestText;
     [SerializeField] private GameObject winMenu;
     [SerializeField] private GameObject pauseMenu;
 
@@ -56,8 +57,22 @@ public class UIController : MonoBehaviour
 
         if (playerLost && loseMenuTime <= 0)
         {
+            float percentage = gameController.GetLevelPercentage();
+            string level = "level" + PlayerPrefs.GetInt("level").ToString() + "Best";
+            float best = PlayerPrefs.GetFloat(level);
+
+            losePercentage.text = percentage.ToString("0") + "%";
+            if (percentage >= best)
+            {
+                bestPercentage.text = percentage.ToString("0") + "%";
+                PlayerPrefs.SetFloat(level, percentage);
+                newBestText.SetActive(true);
+            } else
+            {
+                bestPercentage.text = best.ToString("0") + "%";
+            }         
+
             loseMenu.SetActive(true);
-            playerLost = false;
         }
         else if (exitingPause)
         {
@@ -70,6 +85,12 @@ public class UIController : MonoBehaviour
                 state = UIStates.Running;
             }
         }
+        else
+        {
+            float percentage = gameController.GetLevelPercentage();
+            percText1.text = percentage.ToString("0") + "%";
+            percText2.text = percentage.ToString("0") + "%";
+        }
     }
 
     public void ShowLoseMenu()
@@ -77,6 +98,9 @@ public class UIController : MonoBehaviour
         state = UIStates.Lose;
         playerLost = true;
         loseScore.text = gameController.score.ToString("0");
+
+        losePercentage.text = gameController.GetLevelPercentage().ToString("0") + "%";
+
         loseMenuTime = LOSEMENUTIMER;
     }
 

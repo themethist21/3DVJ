@@ -24,11 +24,13 @@ public class GameController : MonoBehaviour
     private const float OBSSPAWNTIME = 1.4f;
     private const float STAGEDESPAWNTIME = 1.4f;
     private const float OBSDESPAWNTIME = 0.4f;
+    private const float LEVEL1TOTALTIME = 40.0f;
 
     public int score { get; private set;}
 
     private bool godMode = false;
     private bool gamePaused = false;
+    private bool levelStart = false;
 
     //Events
     public UnityEvent<bool> terrainSpawn;
@@ -40,6 +42,7 @@ public class GameController : MonoBehaviour
     //Timers
     private float stageSpawnTimer;
     private float obstacleSpawnTimer;
+    private float levelTime = 0;
 
     public int stageCount = 1;
     private List<GameObject> stages;
@@ -97,6 +100,8 @@ public class GameController : MonoBehaviour
         stageSpawnTimer -= Time.deltaTime;
         obstacleSpawnTimer -= Time.deltaTime;
 
+        if (levelStart) levelTime += Time.deltaTime;
+
         if (Input.GetKeyUp(KeyCode.G))
         {
             godMode = !godMode;
@@ -128,6 +133,7 @@ public class GameController : MonoBehaviour
                     obstacleSpawn.Invoke(true);
                     currentStageState = StageStates.Spawned;
                     playerRun.Invoke(true);
+                    if (!levelStart) levelStart = true;
                 }
                 break;
             case StageStates.Spawned:
@@ -150,6 +156,7 @@ public class GameController : MonoBehaviour
                     {
                         PlayerWin();
                         currentStageState = StageStates.End;
+                        levelStart = false;
                     }
                     else currentStageState = StageStates.Despawned;
                 }
@@ -195,11 +202,14 @@ public class GameController : MonoBehaviour
 
     public void PlayerLose()
     {
+        SetBestPercentage();
+        levelStart = false;
         playerRun.Invoke(false);
     }
 
     private void PlayerWin()
     {
+        SetBestPercentage();
         levelFinish.Invoke();
     }
 
@@ -222,5 +232,31 @@ public class GameController : MonoBehaviour
     {
         if (b) Time.timeScale = 0;
         else Time.timeScale = 1;
+    }
+
+    public float GetLevelPercentage()
+    {
+        int lvl = PlayerPrefs.GetInt("level");
+        float perc;
+        
+        switch (lvl)
+        {
+            case 1:
+                perc = (levelTime / LEVEL1TOTALTIME) * 100;
+                break;
+            default:
+                perc = 0;
+                break;
+        }
+
+        if (perc > 100) return 100;
+        else return perc;
+    }
+
+    private void SetBestPercentage()
+    {
+        int lvl = PlayerPrefs.GetInt("level");
+        string level = "level" + lvl.ToString() + "Best";
+        PlayerPrefs.SetFloat(level, Mathf.Max(GetLevelPercentage(), PlayerPrefs.GetFloat(level)));
     }
 }
