@@ -26,6 +26,8 @@ public class GameController : MonoBehaviour
     private const float OBSDESPAWNTIME = 0.4f;
     private const float LEVEL1TOTALTIME = 40.0f;
 
+    private const float LEVEL2TOTALTIME = 8f;
+
     public int score { get; private set;}
 
     private bool godMode = false;
@@ -210,7 +212,8 @@ public class GameController : MonoBehaviour
     private void PlayerWin()
     {
         SetBestPercentage();
-        levelFinish.Invoke();
+        levelFinish.Invoke(); 
+        //Debug.Log(levelTime);
     }
 
     public void PauseGame()
@@ -244,6 +247,11 @@ public class GameController : MonoBehaviour
             case 1:
                 perc = (levelTime / LEVEL1TOTALTIME) * 100;
                 break;
+
+            case 2:
+                perc = (levelTime / LEVEL2TOTALTIME) * 100;
+                break;
+
             default:
                 perc = 0;
                 break;
