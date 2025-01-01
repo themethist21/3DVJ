@@ -264,7 +264,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
         if (splashPrefab != null)
         {
             alive = false;
-
+            SoundManager.Instance.PlaySFX("splash"); // Reproducir sonido de salpicadura
             GameObject splash = Instantiate(splashPrefab); // Instanciar el splash sin padre
             splash.transform.position = transform.position; // Colocar en la posición global del jugador
             splash.transform.rotation = Quaternion.Euler(-90, 0, 0); // Ajustar la rotación deseada
@@ -274,46 +274,19 @@ public class PlayerMovementHorizontal : MonoBehaviour
             {
                 Destroy(child.gameObject); // DESTRUIMOS EL HAZ DE LUZ Y EL MODELO
             }    
-
-            //yield return new WaitForSeconds(1.5f);
-
-            
-            /*transform.position = initPos; //por si te pilla en medio de un salto
-            transform.eulerAngles = initRot;
-            SetmoveDirection(Vector3.right);
-
-            cargarPrefabs(); // Cargamos el hijo vivo
-
-            alive = true;*/
-            
         }
     }
 
 
     private void SpikeSequence()
     {
-        // 2. Cambia al modelo de “muerto”
+        alive = false;
+
         SetMove(false);
+
+        SoundManager.Instance.PlaySFX("impact");
         
         changeModeltoDie();
-
-        alive = false;
-        
-        // 3. Espera 1.5 segundos
-        //yield return new WaitForSeconds(1.5f);
-
-       /* SetMove(true);
-
-        transform.position = initPos; //por si te pilla en medio de un salto
-        transform.eulerAngles = initRot;
-        SetmoveDirection(Vector3.right);
-
-        Destroy(transform.GetChild(0).gameObject); // Destruimos el hijo muerto
-        cargarPrefabs(); // Cargamos el hijo vivo
-
-        alive = true;
-
-        yield return null;*/
     }
 
     private void Jump()
@@ -404,6 +377,10 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
     public void SetMove(bool b)
     { 
+        if (b)
+            SoundManager.Instance.PlayLoopSound("grass", 0.2f);
+        else
+            SoundManager.Instance.StopLoopSound();
         move = b;
     }
 
