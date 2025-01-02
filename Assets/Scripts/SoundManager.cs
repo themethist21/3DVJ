@@ -9,6 +9,10 @@ public class SoundManager : MonoBehaviour
 
     [Header("Audio Sources")]
     public AudioSource sfxSource; // Para efectos de sonido
+
+    public AudioSource sfxjumpSource; // Para efectos de sonido
+
+    public AudioSource sfxcoinSource; // Para sonidos en bucle
     public AudioSource loopSource; // Para sonidos en bucle
     public AudioSource musicSource; // Para música de fondo
 
@@ -35,6 +39,9 @@ public class SoundManager : MonoBehaviour
     public void PlaySFX(string clipName, float volume = 1.0f)
     {
         AudioClip clip = GetClipByName(clipName);
+        if (clipName == "jump"){
+            sfxSource.Stop();
+        }
         
         if (clip != null && sfxSource != null)
         {
@@ -45,6 +52,23 @@ public class SoundManager : MonoBehaviour
         {
             Debug.LogWarning($"Clip '{clipName}' no encontrado o AudioSource no asignado.");
         }
+    }
+
+    public void PlaySFXJump(float volume = 1.0f){
+        if (sfxjumpSource.isPlaying){
+            sfxjumpSource.Stop();
+        }
+        sfxjumpSource.volume = Mathf.Clamp01(volume);
+        sfxjumpSource.loop = false;
+        AudioClip clip = GetClipByName("jump");
+        sfxjumpSource.PlayOneShot(clip);
+    }
+
+    public void PlaySFXCoin(float volume = 1.0f){
+        sfxcoinSource.volume = Mathf.Clamp01(volume);
+        sfxcoinSource.loop = false;
+        AudioClip clip = GetClipByName("coin");
+        sfxcoinSource.PlayOneShot(clip);
     }
 
         // Reproducir sonidos en bucle
@@ -120,6 +144,33 @@ public class SoundManager : MonoBehaviour
 
             button.onClick.AddListener(() => PlaySFX("click"));       
         }
+
+    }
+
+    public void AssignMusicScene(int sceneIndex){
+        float delayInSeconds = 0f;
+
+        switch(sceneIndex){
+            case 0: //MainMenu
+                PlayMusic("ambient", 0.8f);
+                break;
+
+            case 1: //CharacterSelection
+                break;
+            
+            case 2: //Musica lvl 1
+                delayInSeconds = 1.8f; // Retraso de x segundos
+                PlayMusic("lvl1music", 0.4f, delayInSeconds);
+                break;
+            
+            case 3: //Musica lvl 2
+                delayInSeconds = 1.8f; // Retraso de x segundos
+                PlayMusic("lvl2music", 0.4f, delayInSeconds);
+                break;
+            
+            default:
+                break;
+        }
     }
 
 
@@ -131,6 +182,8 @@ public class SoundManager : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         AssignButtonClickSounds(); // Asigna sonidos a los botones de la nueva escena
+
+        AssignMusicScene(scene.buildIndex); // Asigna música de fondo según la escena
     }
 
 }

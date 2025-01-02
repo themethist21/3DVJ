@@ -48,6 +48,8 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
     public GameObject splashPrefab; // Prefab para la animación de salpicadura
 
+    public GameObject slimesplashPrefab; // Prefab para la animación de salpicadura
+
     public GameObject Estela; // Prefab para la estela
 
     public GameObject dogoDiePrefab; // Prefab para el hijo que muere
@@ -265,7 +267,17 @@ public class PlayerMovementHorizontal : MonoBehaviour
         {
             alive = false;
             SoundManager.Instance.PlaySFX("splash"); // Reproducir sonido de salpicadura
-            GameObject splash = Instantiate(splashPrefab); // Instanciar el splash sin padre
+            GameObject foundObject = GameObject.Find("BGScene");
+            GameObject splash = null;
+            if (foundObject != null){
+                splash = Instantiate(splashPrefab);
+            }else{
+                foundObject = GameObject.Find("BGScene1");
+                if (foundObject != null){
+                    splash = Instantiate(slimesplashPrefab);
+                }
+            }
+             // Instanciar el splash sin padre
             splash.transform.position = transform.position; // Colocar en la posición global del jugador
             splash.transform.rotation = Quaternion.Euler(-90, 0, 0); // Ajustar la rotación deseada
             splash.SetActive(true);
@@ -295,7 +307,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
        
         if (animator != null){
             Debug.Log("Saltando...");
-            SoundManager.Instance.PlaySFX("jump", .5f);
+            SoundManager.Instance.PlaySFXJump(0.4f);
             animator.SetTrigger("JumpTrigger");
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z); // Reiniciar velocidad vertical
             rb.AddForce(Vector3.up * Data.jumpForce, ForceMode.Impulse);

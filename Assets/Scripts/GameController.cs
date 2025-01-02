@@ -26,7 +26,7 @@ public class GameController : MonoBehaviour
     private const float OBSDESPAWNTIME = 0.4f;
     private const float LEVEL1TOTALTIME = 40.0f;
 
-    private const float LEVEL2TOTALTIME = 8f;
+    private const float LEVEL2TOTALTIME = 42.0f;
 
     public int score { get; private set;}
 
@@ -213,7 +213,7 @@ public class GameController : MonoBehaviour
     {
         SetBestPercentage();
         levelFinish.Invoke(); 
-        //Debug.Log(levelTime);
+        Debug.Log(levelTime);
     }
 
     public void PauseGame()

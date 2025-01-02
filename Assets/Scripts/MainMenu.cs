@@ -15,11 +15,6 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        if (SoundManager.Instance != null)
-        {
-            SoundManager.Instance.PlayMusic("ambient", 0.8f);
-        }
-
         level1Perc.text = PlayerPrefs.GetFloat("level1Best").ToString("0") + "%";
 
         level2Perc.text = PlayerPrefs.GetFloat("level2Best").ToString("0") + "%";

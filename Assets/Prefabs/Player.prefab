@@ -108,6 +108,7 @@ MonoBehaviour:
   loboPrefab: {fileID: 7083490246191823173, guid: b6d28ce5bbd51fb4e8bbadf581a34ab5, type: 3}
   pandaPrefab: {fileID: 2230033963581833258, guid: b0f85221cc75b0a4a939e39d0a095d37, type: 3}
   splashPrefab: {fileID: 4818313497553087291, guid: c962e47de4db81b4691a57e7a1f62b1f, type: 3}
+  slimesplashPrefab: {fileID: 4301819545803729760, guid: e024f4d6b6744e34caed9e2ffe4afc0b, type: 3}
   Estela: {fileID: 8099074118825668027, guid: a92ebdf897fa283428c50a41fe4411a5, type: 3}
   dogoDiePrefab: {fileID: 1594274006956971574, guid: 97ebcdc2a0072334e8afeb87995ca36f, type: 3}
   loboDiePrefab: {fileID: 595524864921180587, guid: 9f0649fea8856f046bbc45c13219c194, type: 3}
