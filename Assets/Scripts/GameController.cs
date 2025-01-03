@@ -221,8 +221,9 @@ public class GameController : MonoBehaviour
         if (!gamePaused)
         {
             pauseGame.Invoke(true);
-            PauseTimeScale(true);
+            PauseTimeScale(true); //Pausa el tiempo
             gamePaused = true;
+            SoundManager.Instance.PauseAllSounds();
         }
         else
         {

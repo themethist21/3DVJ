@@ -64,6 +64,31 @@ public class SoundManager : MonoBehaviour
         sfxjumpSource.PlayOneShot(clip);
     }
 
+    public void PauseAllSounds(){
+        sfxSource.Pause();
+        sfxjumpSource.Pause();
+        sfxcoinSource.Pause();
+        loopSource.Pause();
+        musicSource.Pause();
+    }
+
+    public void StopAllSounds(){
+        sfxSource.Stop();
+        sfxjumpSource.Stop();
+        sfxcoinSource.Stop();
+        loopSource.Stop();
+        musicSource.Stop();
+    }
+
+    public void ResumeAllSounds(){
+        sfxSource.UnPause();
+        sfxjumpSource.UnPause();
+        sfxcoinSource.UnPause();
+        loopSource.UnPause();
+        musicSource.UnPause();
+    }
+
+
     public void PlaySFXCoin(float volume = 1.0f){
         sfxcoinSource.volume = Mathf.Clamp01(volume);
         sfxcoinSource.loop = false;
@@ -94,6 +119,10 @@ public class SoundManager : MonoBehaviour
     public void StopLoopSound()
     {
         loopSource.Stop();
+    }
+
+    public void RePlaySounds(){
+        loopSource.Play();
     }
 
     // Reproducir música
@@ -159,7 +188,7 @@ public class SoundManager : MonoBehaviour
                 break;
             
             case 2: //Musica lvl 1
-                delayInSeconds = 1.8f; // Retraso de x segundos
+                delayInSeconds = 1.9f; // Retraso de x segundos
                 PlayMusic("lvl1music", 0.4f, delayInSeconds);
                 break;
             
@@ -179,6 +208,7 @@ public class SoundManager : MonoBehaviour
         // Desuscribirse del evento para evitar errores
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         AssignButtonClickSounds(); // Asigna sonidos a los botones de la nueva escena
