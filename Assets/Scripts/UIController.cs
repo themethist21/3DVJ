@@ -80,6 +80,7 @@ public class UIController : MonoBehaviour
             if (pauseExitTime <= 0)
             {
                 exitingPause = false;
+                SoundManager.Instance.ResumeAllSounds();
                 pauseExitText.gameObject.SetActive(false);
                 gameController.PauseTimeScale(false);
                 state = UIStates.Running;
@@ -129,11 +130,14 @@ public class UIController : MonoBehaviour
 
     public void RestartScene()
     {
+        SoundManager.Instance.StopAllSounds();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void ReturnToMainMenu()
     {
+        SoundManager.Instance.StopAllSounds();
+        Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
 
@@ -146,6 +150,7 @@ public class UIController : MonoBehaviour
 
     public void ReturnToCharacterSelection()
     {
+        SoundManager.Instance.StopAllSounds();
         SceneManager.LoadScene(1);
     }
 
