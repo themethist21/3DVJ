@@ -188,12 +188,12 @@ public class SoundManager : MonoBehaviour
                 break;
             
             case 2: //Musica lvl 1
-                delayInSeconds = 1.9f; // Retraso de x segundos
+                delayInSeconds = 2.1f; // Retraso de x segundos
                 PlayMusic("lvl1music", 0.4f, delayInSeconds);
                 break;
             
             case 3: //Musica lvl 2
-                delayInSeconds = 1.8f; // Retraso de x segundos
+                delayInSeconds = 2f; // Retraso de x segundos
                 PlayMusic("lvl2music", 0.4f, delayInSeconds);
                 break;
             
