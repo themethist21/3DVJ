@@ -35,7 +35,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
     public PlayerStates state = PlayerStates.Grounded;
 
-    public float rayDistance = 2f;
+    public float rayDistance = 1f;
 
     public UnityEvent playerLose;
     public UnityEvent stageFinish;
@@ -183,7 +183,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
 
         //Input
 
-        if (Input.GetKeyDown(KeyCode.Space) && !gamePaused)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && !gamePaused) // Si se presiona la barra espaciadora o el botón izquierdo del ratón
         {
             lastJumpInputTimer = Data.jumpInputBufferTime;
         }
@@ -340,7 +340,7 @@ public class PlayerMovementHorizontal : MonoBehaviour
         Vector3 direction = Vector3.down;
 
         // Lanzar el raycast desde la posición del objeto
-        if (Physics.Raycast(transform.position, direction, out RaycastHit hitInfo, rayDistance))
+        if (Physics.Raycast(transform.position, direction, out RaycastHit hitInfo, rayDistance) && !(hitInfo.collider.CompareTag("LeftTurn") && hitInfo.collider.CompareTag("RightTurn")))
         {
             // Si el raycast golpea un objeto, obtiene su Collider
             Collider blockCollider = hitInfo.collider;
